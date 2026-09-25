@@ -1,0 +1,998 @@
+/* =========================================================
+   PROFILE PAGE
+========================================================= */
+
+.profile-page {
+  min-height: calc(100vh - 85px);
+  padding: 35px;
+  background: #f7f5ff;
+  box-sizing: border-box;
+}
+
+.profile-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+
+/* =========================================================
+   LOGIN / REGISTER WELCOME CARD
+========================================================= */
+
+.profile-welcome {
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 40px 25px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(63, 42, 111, 0.05);
+  margin-bottom: 25px;
+}
+
+.profile-avatar {
+  width: 95px;
+  height: 95px;
+  margin: 0 auto 20px;
+
+  border-radius: 50%;
+  background: #f1ecff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 52px;
+}
+
+.profile-welcome h2 {
+  margin: 0;
+
+  font-size: 30px;
+  font-weight: 700;
+  color: #18213a;
+}
+
+.profile-welcome p {
+  margin: 10px 0 25px;
+
+  color: #718096;
+  font-size: 17px;
+}
+
+
+/* =========================================================
+   LOGIN / REGISTER BUTTONS
+========================================================= */
+
+.auth-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.login-button,
+.register-button {
+  width: 190px;
+  height: 54px;
+
+  border-radius: 10px;
+
+  font-size: 17px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.login-button {
+  border: 2px solid #6632f4;
+  background: #ffffff;
+  color: #6632f4;
+}
+
+.login-button:hover {
+  background: #f5f1ff;
+}
+
+.register-button {
+  border: 2px solid #6632f4;
+  background: #6632f4;
+  color: #ffffff;
+}
+
+.register-button:hover {
+  background: #5425d8;
+}
+
+
+/* =========================================================
+   PROFILE OPTIONS
+========================================================= */
+
+.profile-options {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.profile-option {
+  width: 100%;
+  min-height: 80px;
+
+  border: none;
+  background: #ffffff;
+
+  border-radius: 17px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 28px;
+
+  font-size: 17px;
+  text-align: left;
+
+  cursor: pointer;
+
+  box-sizing: border-box;
+
+  box-shadow: 0 3px 12px rgba(63, 42, 111, 0.03);
+
+  transition: 0.2s ease;
+}
+
+.profile-option:hover {
+  box-shadow: 0 5px 18px rgba(63, 42, 111, 0.08);
+  transform: translateY(-1px);
+}
+
+.profile-option-icon {
+  width: 55px;
+
+  font-size: 25px;
+
+  display: flex;
+  align-items: center;
+}
+
+.profile-option-title {
+  flex: 1;
+
+  color: #18213a;
+  font-size: 17px;
+}
+
+.profile-arrow {
+  font-size: 22px;
+  color: #667085;
+}
+
+
+/* =========================================================
+   MODAL OVERLAY
+========================================================= */
+
+.profile-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(24, 33, 58, 0.58);
+
+  z-index: 2000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   PROFILE MODAL
+========================================================= */
+
+.profile-modal {
+  width: 100%;
+  max-width: 650px;
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  background: #ffffff;
+
+  border-radius: 22px;
+
+  padding: 30px;
+
+  position: relative;
+
+  box-sizing: border-box;
+
+  box-shadow: 0 15px 50px rgba(35, 20, 75, 0.20);
+}
+
+.profile-modal-close {
+  position: absolute;
+
+  top: 18px;
+  right: 18px;
+
+  width: 42px;
+  height: 42px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: #f7f5ff;
+
+  font-size: 22px;
+
+  cursor: pointer;
+}
+
+.profile-modal-close:hover {
+  background: #e8e3f4;
+}
+
+.profile-modal h2 {
+  margin: 0;
+
+  font-size: 28px;
+  color: #18213a;
+}
+
+.profile-modal-subtitle {
+  color: #718096;
+
+  margin-top: 7px;
+  margin-bottom: 25px;
+
+  font-size: 15px;
+}
+
+
+/* =========================================================
+   PROFILE FORM
+========================================================= */
+
+.profile-form {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 16px;
+}
+
+.profile-form-group {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 7px;
+}
+
+.profile-form-group label {
+  font-weight: 700;
+
+  font-size: 14px;
+
+  color: #222;
+}
+
+.profile-form-group input,
+.profile-form-group textarea,
+.profile-form-group select {
+  width: 100%;
+
+  min-height: 48px;
+
+  border: 1px solid #e3ddf1;
+
+  border-radius: 9px;
+
+  padding: 12px;
+
+  font-size: 15px;
+
+  outline: none;
+
+  font-family: inherit;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+}
+
+.profile-form-group textarea {
+  min-height: 90px;
+
+  resize: vertical;
+}
+
+.profile-form-group input:focus,
+.profile-form-group textarea:focus,
+.profile-form-group select:focus {
+  border-color: #6632f4;
+
+  box-shadow: 0 0 0 2px rgba(103, 56, 238, 0.10);
+}
+
+
+/* =========================================================
+   MOBILE NUMBER
+========================================================= */
+
+.mobile-input {
+  display: flex;
+
+  width: 100%;
+}
+
+.mobile-code {
+  width: 70px;
+
+  background: #f7f5ff;
+
+  border: 1px solid #e3ddf1;
+
+  border-right: none;
+
+  border-radius: 9px 0 0 9px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 700;
+
+  box-sizing: border-box;
+}
+
+.mobile-input input {
+  flex: 1;
+
+  border-radius: 0 9px 9px 0 !important;
+}
+
+
+/* =========================================================
+   OTP
+========================================================= */
+
+.otp-row {
+  display: flex;
+
+  gap: 10px;
+
+  width: 100%;
+}
+
+.otp-row input {
+  flex: 1;
+}
+
+.send-otp-button {
+  min-width: 120px;
+
+  height: 48px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: #6632f4;
+
+  color: #ffffff;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.send-otp-button:hover {
+  background: #5425d8;
+}
+
+
+/* =========================================================
+   SUBMIT PROFILE
+========================================================= */
+
+.submit-profile {
+  width: 100%;
+
+  height: 52px;
+
+  margin-top: 5px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: #6632f4;
+
+  color: #ffffff;
+
+  font-size: 16px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.submit-profile:hover {
+  background: #5425d8;
+}
+
+
+/* =========================================================
+   WISHLIST
+========================================================= */
+
+.wishlist-page {
+  min-height: calc(100vh - 80px);
+
+  padding: 25px;
+
+  background: #f7f5ff;
+
+  box-sizing: border-box;
+}
+
+.wishlist-header {
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+  margin-bottom: 25px;
+}
+
+.wishlist-header h2 {
+  margin: 0;
+
+  font-size: 28px;
+
+  color: #18213a;
+}
+
+.back-button {
+  width: 42px;
+  height: 42px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  font-size: 22px;
+
+  cursor: pointer;
+}
+
+.back-button:hover {
+  background: #e8e3f4;
+}
+
+.wishlist-grid {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 18px;
+}
+
+.wishlist-card {
+  position: relative;
+
+  background: #ffffff;
+
+  border: 1px solid #e8e3f4;
+
+  border-radius: 15px;
+
+  overflow: hidden;
+}
+
+.wishlist-card img {
+  width: 100%;
+
+  height: 210px;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+.wishlist-heart {
+  position: absolute;
+
+  right: 12px;
+  top: 12px;
+
+  width: 40px;
+  height: 40px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  color: red;
+
+  font-size: 23px;
+
+  cursor: pointer;
+
+  z-index: 2;
+
+  box-shadow: 0 2px 8px rgba(63, 42, 111, 0.08);
+}
+
+.wishlist-info {
+  padding: 14px;
+}
+
+.wishlist-info h3 {
+  margin: 0 0 5px;
+
+  font-size: 17px;
+}
+
+.wishlist-info p {
+  margin: 0 0 12px;
+
+  color: #718096;
+}
+
+.wishlist-bottom {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.wishlist-bottom strong {
+  font-size: 18px;
+}
+
+.wishlist-bottom button {
+  border: none;
+
+  background: #6632f4;
+
+  color: #ffffff;
+
+  padding: 9px 18px;
+
+  border-radius: 7px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.wishlist-bottom button:hover {
+  background: #5425d8;
+}
+
+.wishlist-empty {
+  background: #ffffff;
+
+  border-radius: 16px;
+
+  padding: 80px 20px;
+
+  text-align: center;
+}
+
+.wishlist-empty-icon {
+  font-size: 65px;
+
+  color: #e3ddf1;
+}
+
+.wishlist-empty h3 {
+  font-size: 22px;
+}
+
+.wishlist-empty p {
+  color: #718096;
+}
+
+.wishlist-empty button {
+  background: #6632f4;
+
+  color: #ffffff;
+
+  border: none;
+
+  padding: 12px 25px;
+
+  border-radius: 8px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   PAYMENT METHODS
+========================================================= */
+
+.payment-list {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.payment-method {
+  border: 1px solid #e3ddf1;
+
+  border-radius: 12px;
+
+  padding: 17px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+  background: #ffffff;
+}
+
+.payment-method-icon {
+  font-size: 27px;
+}
+
+.payment-method-info {
+  flex: 1;
+}
+
+.payment-method-info strong {
+  display: block;
+
+  font-size: 16px;
+}
+
+.payment-method-info span {
+  color: #718096;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+  .profile-page {
+    padding: 18px 12px 100px;
+  }
+
+  .profile-welcome {
+    padding: 28px 15px;
+
+    border-radius: 18px;
+  }
+
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+
+    font-size: 42px;
+  }
+
+  .profile-welcome h2 {
+    font-size: 24px;
+  }
+
+  .profile-welcome p {
+    font-size: 15px;
+  }
+
+  .auth-buttons {
+    gap: 10px;
+  }
+
+  .login-button,
+  .register-button {
+    width: 145px;
+
+    height: 50px;
+
+    font-size: 15px;
+  }
+
+  .profile-option {
+    min-height: 70px;
+
+    padding: 0 16px;
+
+    border-radius: 14px;
+
+    font-size: 15px;
+  }
+
+  .profile-option-icon {
+    width: 45px;
+
+    font-size: 23px;
+  }
+
+  .profile-option-title {
+    font-size: 15px;
+  }
+
+  .profile-arrow {
+    font-size: 19px;
+  }
+
+
+  /* MODAL */
+
+  .profile-overlay {
+    padding: 12px;
+  }
+
+  .profile-modal {
+    padding: 24px 18px;
+
+    border-radius: 18px;
+
+    max-height: 92vh;
+  }
+
+  .profile-modal h2 {
+    font-size: 24px;
+  }
+
+  .profile-modal-subtitle {
+    font-size: 14px;
+  }
+
+
+  /* OTP */
+
+  .otp-row {
+    flex-direction: column;
+  }
+
+  .send-otp-button {
+    width: 100%;
+
+    height: 48px;
+  }
+
+
+  /* WISHLIST */
+
+  .wishlist-page {
+    padding: 15px 12px 100px;
+  }
+
+  .wishlist-grid {
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 12px;
+  }
+
+  .wishlist-card img {
+    height: 160px;
+  }
+
+  .wishlist-header h2 {
+    font-size: 22px;
+  }
+
+  .wishlist-info {
+    padding: 10px;
+  }
+
+  .wishlist-info h3 {
+    font-size: 15px;
+  }
+
+  .wishlist-bottom strong {
+    font-size: 16px;
+  }
+
+  .wishlist-bottom button {
+    padding: 8px 12px;
+
+    font-size: 13px;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 420px) {
+
+  .auth-buttons {
+    flex-direction: column;
+  }
+
+  .login-button,
+  .register-button {
+    width: 100%;
+  }
+
+  .wishlist-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wishlist-card img {
+    height: 190px;
+  }
+
+  .profile-option {
+    min-height: 65px;
+  }
+
+  .profile-option-icon {
+    width: 40px;
+  }
+}
+
+
+/* =========================================================
+   MAXIGO CUSTOMER PROFILE — FINAL THEME OVERRIDES
+   Same brand system as Store / Rider panels
+   ========================================================= */
+
+.profile-page,
+.wishlist-page {
+  background: #f7f5ff;
+}
+
+.profile-welcome,
+.profile-option,
+.profile-modal,
+.payment-method,
+.wishlist-card,
+.wishlist-empty {
+  border: 1px solid #e8e3f4;
+  box-shadow: 0 8px 24px rgba(63, 42, 111, 0.06);
+}
+
+.profile-welcome {
+  background: #ffffff;
+}
+
+.profile-avatar {
+  background: #f1ecff;
+}
+
+.profile-welcome h2,
+.profile-option-title,
+.profile-modal h2,
+.wishlist-header h2,
+.wishlist-info h3 {
+  color: #18213a;
+}
+
+.profile-welcome p,
+.profile-modal-subtitle,
+.wishlist-info p,
+.wishlist-empty p,
+.payment-method-info span,
+.profile-option-description {
+  color: #718096;
+}
+
+.login-button {
+  border-color: #6632f4;
+  color: #6632f4;
+  background: #ffffff;
+}
+
+.login-button:hover {
+  background: #f5f1ff;
+}
+
+.register-button,
+.submit-profile,
+.send-otp-button {
+  border-color: #6632f4;
+  background: linear-gradient(135deg, #6632f4 0%, #843ce8 100%);
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(103, 56, 238, 0.18);
+}
+
+.register-button:hover,
+.submit-profile:hover,
+.send-otp-button:hover {
+  background: linear-gradient(135deg, #5425d8 0%, #7432d8 100%);
+}
+
+.profile-option:hover {
+  background: #f5f1ff;
+  border-color: #d9ccff;
+  box-shadow: 0 10px 26px rgba(103, 56, 238, 0.09);
+}
+
+.profile-arrow {
+  color: #6738ee;
+}
+
+.profile-overlay {
+  background: rgba(24, 33, 58, 0.58);
+  backdrop-filter: blur(6px);
+}
+
+.profile-modal-close {
+  background: #f7f5ff;
+  color: #6738ee;
+  border: 1px solid #e8e3f4;
+}
+
+.profile-modal-close:hover {
+  background: #eee8ff;
+}
+
+.profile-form-group input,
+.profile-form-group textarea,
+.profile-form-group select {
+  border-color: #ddd6ec;
+  color: #18213a;
+}
+
+.profile-form-group input:focus,
+.profile-form-group textarea:focus,
+.profile-form-group select:focus {
+  border-color: #6738ee;
+  box-shadow: 0 0 0 3px rgba(103, 56, 238, 0.10);
+}
+
+.mobile-code {
+  background: #f7f5ff;
+  border-color: #ddd6ec;
+  color: #18213a;
+}
+
+.wishlist-bottom button,
+.wishlist-empty button {
+  background: linear-gradient(135deg, #6632f4 0%, #843ce8 100%);
+  box-shadow: 0 8px 18px rgba(103, 56, 238, 0.18);
+}
+
+.wishlist-bottom button:hover,
+.wishlist-empty button:hover {
+  background: linear-gradient(135deg, #5425d8 0%, #7432d8 100%);
+}
+
+.payment-method {
+  border-color: #e8e3f4;
+}
+
+@media (max-width: 700px) {
+  .profile-page,
+  .wishlist-page {
+    background: #f7f5ff;
+  }
+
+  .profile-option {
+    border-color: #e8e3f4;
+  }
+}

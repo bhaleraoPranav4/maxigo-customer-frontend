@@ -1,0 +1,160 @@
+/* =========================================================
+   MAXIGO CUSTOMER - SEARCH
+   Same purple pattern as Store / Rider panels
+   ========================================================= */
+
+.customer-search-box {
+  width: min(1180px, 92%);
+  min-height: 60px;
+
+  margin: 14px auto 0;
+  padding: 0 18px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  background: #ffffff;
+  border: 1px solid #e8e3f4;
+  border-radius: 17px;
+
+  box-shadow: 0 8px 24px rgba(103, 56, 238, 0.07);
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+
+  box-sizing: border-box;
+}
+
+.customer-search-box:focus-within {
+  border-color: #cdbdf2;
+  box-shadow: 0 10px 28px rgba(103, 56, 238, 0.13);
+}
+
+.customer-search-icon {
+  flex: 0 0 auto;
+
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #6738ee;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.customer-search-box input {
+  flex: 1;
+  min-width: 0;
+
+  height: 54px;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+  color: #18213a;
+
+  font-size: 17px;
+  font-family: inherit;
+}
+
+.customer-search-box input::placeholder {
+  color: #8a95a7;
+}
+
+.customer-search-clear {
+  flex: 0 0 auto;
+
+  width: 34px;
+  height: 34px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #f1ecff;
+  color: #6738ee;
+
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 800;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.customer-search-clear:hover {
+  background: #e5dcff;
+  transform: scale(1.05);
+}
+
+.customer-search-clear:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 800px) {
+  .customer-search-box {
+    width: 94%;
+    min-height: 56px;
+    margin-top: 11px;
+    padding: 0 15px;
+    border-radius: 15px;
+  }
+
+  .customer-search-box input {
+    height: 50px;
+    font-size: 15px;
+  }
+
+  .customer-search-icon {
+    width: 25px;
+    height: 25px;
+    font-size: 22px;
+  }
+
+  .customer-search-clear {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .customer-search-box {
+    width: 94%;
+    min-height: 52px;
+    padding: 0 13px;
+    gap: 9px;
+    border-radius: 14px;
+  }
+
+  .customer-search-box input {
+    height: 46px;
+    font-size: 14px;
+  }
+
+  .customer-search-box input::placeholder {
+    font-size: 13px;
+  }
+
+  .customer-search-icon {
+    width: 23px;
+    height: 23px;
+    font-size: 20px;
+  }
+
+  .customer-search-clear {
+    width: 30px;
+    height: 30px;
+    font-size: 13px;
+  }
+}

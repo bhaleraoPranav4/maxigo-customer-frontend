@@ -1,0 +1,954 @@
+/* =========================================================
+   MAXIGO CUSTOMER - PREMIUM CHECKOUT
+   PaymentMethods.jsx compatible CSS
+   Brand: MaxiGo Purple / White / Soft Lavender
+   ========================================================= */
+
+.payment-page {
+  --mx-purple: #6738ee;
+  --mx-purple-dark: #5526d9;
+  --mx-purple-light: #f1ebff;
+  --mx-purple-soft: #f8f5ff;
+  --mx-text: #18213a;
+  --mx-muted: #74809a;
+  --mx-border: #e7e0f6;
+  --mx-green: #168448;
+  --mx-danger: #d73535;
+
+  width: 100%;
+  min-height: calc(100vh - 80px);
+  box-sizing: border-box;
+  padding: 34px 35px 125px;
+
+  background:
+    radial-gradient(
+      650px 350px at 90% 0%,
+      rgba(103, 56, 238, 0.12),
+      transparent 65%
+    ),
+    radial-gradient(
+      500px 300px at 0% 25%,
+      rgba(132, 60, 232, 0.06),
+      transparent 65%
+    ),
+    #f8f6ff;
+
+  color: var(--mx-text);
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.payment-header {
+  width: min(960px, 100%);
+  margin: 0 auto 28px;
+
+  display: flex;
+  align-items: center;
+  gap: 17px;
+}
+
+.payment-header > div {
+  min-width: 0;
+}
+
+.payment-header h1 {
+  margin: 0;
+
+  color: var(--mx-text);
+  font-size: 32px;
+  line-height: 1.15;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+}
+
+.payment-header p {
+  margin: 7px 0 0;
+
+  color: var(--mx-muted);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* =========================================================
+   BACK BUTTON
+   ========================================================= */
+
+.payment-page .back-button {
+  width: 54px;
+  height: 54px;
+  min-width: 54px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 1px solid #e2daf5;
+  border-radius: 16px;
+
+  background: #fff;
+  color: var(--mx-purple);
+
+  font-size: 27px;
+  font-weight: 700;
+  line-height: 1;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 24px rgba(74, 45, 145, 0.08),
+    0 2px 5px rgba(74, 45, 145, 0.04);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.payment-page .back-button:hover {
+  background: var(--mx-purple-soft);
+  border-color: #d2c4f5;
+  transform: translateX(-2px);
+  box-shadow: 0 12px 28px rgba(103, 56, 238, 0.14);
+}
+
+.payment-page .back-button:active {
+  transform: translateX(-1px) scale(0.97);
+}
+
+/* =========================================================
+   COMMON WHITE SECTIONS
+   ========================================================= */
+
+.payment-section {
+  width: min(960px, 100%);
+  margin: 0 auto 22px;
+  padding: 28px 30px;
+
+  box-sizing: border-box;
+
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid var(--mx-border);
+  border-radius: 22px;
+
+  box-shadow:
+    0 14px 38px rgba(63, 42, 111, 0.055),
+    0 2px 7px rgba(63, 42, 111, 0.025);
+}
+
+.payment-section > h3 {
+  margin: 0 0 20px;
+
+  color: var(--mx-text);
+  font-size: 22px;
+  line-height: 1.25;
+  font-weight: 900;
+  letter-spacing: -0.2px;
+}
+
+/* =========================================================
+   ADDRESS
+   ========================================================= */
+
+.address-list {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  margin: 0;
+  padding: 0;
+}
+
+.address-card {
+  position: relative;
+
+  width: 100%;
+  min-height: 124px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+
+  box-sizing: border-box;
+  margin: 0;
+  padding: 18px 19px;
+
+  border: 1.5px solid #e1dced;
+  border-radius: 16px;
+
+  background: #fff;
+  color: var(--mx-text);
+
+  font-family: inherit;
+  text-align: left;
+
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+
+  overflow: hidden;
+
+  box-shadow: 0 4px 15px rgba(63, 42, 111, 0.035);
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.address-card:hover {
+  border-color: #cfc0f3;
+  background: #fdfbff;
+  transform: translateY(-1px);
+  box-shadow: 0 9px 24px rgba(103, 56, 238, 0.09);
+}
+
+/* Selected address - current JSX adds inline border */
+.address-card[style*="2px"] {
+  border-color: var(--mx-purple) !important;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(103, 56, 238, 0.055),
+      rgba(255, 255, 255, 1) 35%
+    );
+  box-shadow:
+    0 8px 25px rgba(103, 56, 238, 0.10),
+    inset 4px 0 0 var(--mx-purple);
+}
+
+.address-card:focus-visible {
+  outline: 3px solid rgba(103, 56, 238, 0.16);
+  outline-offset: 2px;
+}
+
+.address-card-header {
+  width: 100%;
+  min-height: 27px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.address-card-header strong {
+  color: var(--mx-text);
+  font-size: 15px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.address-card-header span {
+  padding: 4px 8px;
+
+  border-radius: 999px;
+
+  background: var(--mx-purple-light);
+  color: var(--mx-purple);
+
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.address-card > div:nth-child(2) {
+  width: 100%;
+}
+
+.address-card > div:nth-child(2) > strong {
+  display: block;
+
+  margin: 0 0 5px;
+
+  color: #202a43;
+  font-size: 15px;
+  line-height: 1.3;
+  font-weight: 800;
+}
+
+.address-card p {
+  margin: 0 0 7px;
+
+  color: #56627a;
+  font-size: 14px;
+  line-height: 1.5;
+
+  overflow-wrap: anywhere;
+}
+
+.address-card small {
+  display: block;
+
+  color: #7d879b;
+  font-size: 12px;
+}
+
+/* Selected text */
+.address-card > div:last-child {
+  margin-top: 9px;
+
+  color: var(--mx-purple);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* =========================================================
+   REFERRAL OFFER
+   ========================================================= */
+
+.payment-section[style*="fff8ef"] {
+  padding: 20px 24px !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fff8ef 0%,
+      #fffdf9 100%
+    ) !important;
+
+  border: 1px solid #ffe0bd !important;
+  border-radius: 18px !important;
+
+  box-shadow: 0 8px 24px rgba(181, 112, 39, 0.055);
+}
+
+.payment-section[style*="fff8ef"] h3 {
+  margin: 0;
+
+  color: #8b4f10;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.payment-section[style*="fff8ef"] p {
+  line-height: 1.5;
+}
+
+/* =========================================================
+   PAYMENT METHOD
+   ========================================================= */
+
+.payment-methods {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+
+  margin: 0;
+  padding: 0;
+}
+
+.payment-method-card {
+  position: relative;
+
+  width: 100%;
+  min-height: 94px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  box-sizing: border-box;
+  margin: 0;
+  padding: 16px;
+
+  border: 1.5px solid #e1dced;
+  border-radius: 16px;
+
+  background: #fff;
+  color: var(--mx-text);
+
+  font-family: inherit;
+  text-align: left;
+
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+
+  box-shadow: 0 4px 15px rgba(63, 42, 111, 0.035);
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.payment-method-card:hover {
+  border-color: #cfc0f3;
+  background: #fdfbff;
+  transform: translateY(-1px);
+  box-shadow: 0 9px 24px rgba(103, 56, 238, 0.09);
+}
+
+/* Current JSX sets inline 2px border when selected */
+.payment-method-card[style*="2px"] {
+  border-color: var(--mx-purple) !important;
+  background:
+    linear-gradient(
+      135deg,
+      #f7f2ff 0%,
+      #ffffff 100%
+    );
+
+  box-shadow:
+    0 8px 25px rgba(103, 56, 238, 0.11),
+    inset 0 0 0 1px rgba(103, 56, 238, 0.05);
+}
+
+.payment-method-card:focus-visible {
+  outline: 3px solid rgba(103, 56, 238, 0.16);
+  outline-offset: 2px;
+}
+
+.payment-method-icon {
+  width: 54px;
+  height: 54px;
+  min-width: 54px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #f4efff 0%,
+      #eae1ff 100%
+    );
+
+  font-size: 25px;
+
+  box-shadow: inset 0 0 0 1px rgba(103, 56, 238, 0.05);
+}
+
+.payment-method-info {
+  flex: 1;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.payment-method-info strong {
+  display: block;
+
+  color: var(--mx-text);
+  font-size: 15px;
+  line-height: 1.3;
+  font-weight: 850;
+}
+
+.payment-method-info span {
+  display: block;
+
+  color: var(--mx-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* Last ✓ / ○ */
+.payment-method-card > span:last-child {
+  width: 26px;
+  min-width: 26px;
+  height: 26px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  color: #8993a7;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.payment-method-card[style*="2px"] > span:last-child {
+  background: var(--mx-purple);
+  color: #fff;
+}
+
+/* =========================================================
+   DELIVERY NOTE
+   ========================================================= */
+
+.payment-section textarea {
+  display: block;
+
+  width: 100%;
+  min-height: 125px;
+
+  box-sizing: border-box;
+
+  padding: 15px 16px;
+
+  border: 1px solid #ddd6ec;
+  border-radius: 14px;
+
+  background: #fff;
+  color: var(--mx-text);
+
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.55;
+
+  outline: none;
+
+  resize: vertical;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.payment-section textarea:hover {
+  border-color: #cfc4e4;
+}
+
+.payment-section textarea::placeholder {
+  color: #a0a9b8;
+}
+
+.payment-section textarea:focus {
+  background: #fff;
+
+  border-color: var(--mx-purple);
+
+  box-shadow:
+    0 0 0 4px rgba(103, 56, 238, 0.09);
+}
+
+/* =========================================================
+   SUMMARY
+   ========================================================= */
+
+.cart-summary {
+  width: min(960px, 100%);
+  margin: 0 auto;
+
+  padding: 27px 30px;
+
+  box-sizing: border-box;
+
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid var(--mx-border);
+  border-radius: 22px;
+
+  box-shadow:
+    0 14px 38px rgba(63, 42, 111, 0.065),
+    0 2px 7px rgba(63, 42, 111, 0.025);
+}
+
+.cart-summary > div:not(.grand-total) {
+  min-height: 43px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+}
+
+.cart-summary > div:not(.grand-total) > span {
+  color: #718096;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cart-summary > div:not(.grand-total) > strong {
+  color: var(--mx-text);
+  font-size: 15px;
+  font-weight: 850;
+}
+
+/* Referral discount inline style override */
+.cart-summary > div:has(
+  span[style*="168448"]
+) > span,
+.cart-summary > div:has(
+  strong[style*="168448"]
+) > strong {
+  color: var(--mx-green) !important;
+}
+
+.cart-summary hr {
+  width: 100%;
+  height: 1px;
+
+  margin: 10px 0 14px;
+
+  border: 0;
+
+  background: #eeeaf6;
+}
+
+.cart-summary > p {
+  margin: 8px 0 0;
+
+  color: var(--mx-danger) !important;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* =========================================================
+   GRAND TOTAL
+   ========================================================= */
+
+.cart-summary .grand-total {
+  min-height: 57px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+}
+
+.cart-summary .grand-total span {
+  color: var(--mx-text);
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.cart-summary .grand-total strong {
+  color: var(--mx-purple);
+  font-size: 28px;
+  line-height: 1;
+  font-weight: 950;
+}
+
+/* =========================================================
+   PLACE ORDER
+   ========================================================= */
+
+.cart-summary .checkout-button {
+  width: 100%;
+  height: 55px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 19px;
+  padding: 0 20px;
+
+  border: none;
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6632f4 0%,
+      #843ce8 100%
+    );
+
+  color: #fff;
+
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 850;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 10px 23px rgba(103, 56, 238, 0.22);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.cart-summary .checkout-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 14px 30px rgba(103, 56, 238, 0.31);
+}
+
+.cart-summary .checkout-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.cart-summary .checkout-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* =========================================================
+   EMPTY ADDRESS BUTTON
+   ========================================================= */
+
+.payment-section > div > button {
+  min-height: 45px;
+
+  margin-top: 5px;
+  padding: 0 21px;
+
+  border: none;
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6632f4,
+      #843ce8
+    );
+
+  color: #fff;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  box-shadow: 0 7px 17px rgba(103, 56, 238, 0.18);
+}
+
+/* =========================================================
+   PROTECTION AGAINST GLOBAL / OLD CSS
+   ========================================================= */
+
+.payment-page .address-card,
+.payment-page .payment-method-card {
+  float: none !important;
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+}
+
+.payment-page .address-list,
+.payment-page .payment-methods {
+  float: none !important;
+  width: 100% !important;
+}
+
+.payment-page button {
+  font-family: inherit;
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .payment-page {
+    padding: 27px 20px 120px;
+  }
+
+  .payment-section,
+  .cart-summary,
+  .payment-header {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .payment-page {
+    min-height: calc(100vh - 70px);
+    padding: 19px 14px 112px;
+  }
+
+  .payment-header {
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .payment-header h1 {
+    font-size: 25px;
+    letter-spacing: -0.3px;
+  }
+
+  .payment-header p {
+    margin-top: 5px;
+    font-size: 12px;
+  }
+
+  .payment-page .back-button {
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
+    border-radius: 13px;
+    font-size: 23px;
+  }
+
+  .payment-section {
+    padding: 20px 16px;
+    margin-bottom: 17px;
+    border-radius: 18px;
+  }
+
+  .payment-section > h3 {
+    margin-bottom: 17px;
+    font-size: 19px;
+  }
+
+  .address-card {
+    min-height: 115px;
+    padding: 15px;
+    border-radius: 14px;
+  }
+
+  .address-card-header strong {
+    font-size: 14px;
+  }
+
+  .address-card-header span {
+    font-size: 9px;
+  }
+
+  .address-card > div:nth-child(2) > strong {
+    font-size: 14px;
+  }
+
+  .address-card p {
+    font-size: 12px;
+  }
+
+  .address-card small {
+    font-size: 11px;
+  }
+
+  .payment-methods {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .payment-method-card {
+    min-height: 76px;
+    padding: 13px;
+    border-radius: 14px;
+  }
+
+  .payment-method-icon {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    font-size: 22px;
+    border-radius: 13px;
+  }
+
+  .payment-method-info strong {
+    font-size: 14px;
+  }
+
+  .payment-method-info span {
+    font-size: 11px;
+  }
+
+  .cart-summary {
+    padding: 21px 16px;
+    border-radius: 18px;
+  }
+
+  .cart-summary .grand-total span {
+    font-size: 18px;
+  }
+
+  .cart-summary .grand-total strong {
+    font-size: 23px;
+  }
+
+  .cart-summary .checkout-button {
+    height: 52px;
+    border-radius: 13px;
+    font-size: 15px;
+  }
+}
+
+/* =========================================================
+   SMALL PHONE
+   ========================================================= */
+
+@media (max-width: 420px) {
+  .payment-page {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .payment-header {
+    gap: 10px;
+  }
+
+  .payment-header h1 {
+    font-size: 22px;
+  }
+
+  .payment-header p {
+    font-size: 11px;
+  }
+
+  .payment-section {
+    padding: 17px 13px;
+    border-radius: 16px;
+  }
+
+  .payment-section > h3 {
+    font-size: 18px;
+  }
+
+  .address-card {
+    padding: 13px;
+  }
+
+  .payment-method-card {
+    padding: 11px;
+    gap: 10px;
+  }
+
+  .payment-method-icon {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    font-size: 20px;
+  }
+
+  .payment-method-card > span:last-child {
+    width: 23px;
+    min-width: 23px;
+    height: 23px;
+  }
+
+  .cart-summary {
+    padding: 18px 13px;
+  }
+
+  .cart-summary > div:not(.grand-total) > span {
+    font-size: 13px;
+  }
+
+  .cart-summary > div:not(.grand-total) > strong {
+    font-size: 14px;
+  }
+
+  .cart-summary .grand-total strong {
+    font-size: 21px;
+  }
+}
