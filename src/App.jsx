@@ -121,10 +121,10 @@ function getProductImage(product) {
   }
 
   if (image.startsWith("/")) {
-    return `http://localhost:8080${image}`;
+   return `https://api.maxigo.in${image}`;
   }
 
-  return `http://localhost:8080/${image}`;
+ return `https://api.maxigo.in${image}`;
 }
 
 // =========================================================
