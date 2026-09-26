@@ -489,9 +489,7 @@ function Profile({
           password: "",
         });
 
-        setOtpSent(
-          false
-        );
+       
 
         setActiveModal(
           null
