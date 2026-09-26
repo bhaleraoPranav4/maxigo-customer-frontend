@@ -67,13 +67,7 @@ function Profile({
     city: "Ahilya Nagar",
     pincode: "",
     password: "",
-    otp: "",
   });
-
-  const [
-    otpSent,
-    setOtpSent,
-  ] = useState(false);
 
   // =======================================================
   // PROFILE
@@ -347,42 +341,6 @@ function Profile({
         })
       );
     };
-
-  // =======================================================
-  // SEND OTP
-  // =======================================================
-
-  const sendOTP =
-    () => {
-
-      if (
-        !registerData.mobile ||
-        registerData.mobile.length !==
-          10
-      ) {
-
-        alert(
-          "Please enter valid 10 digit mobile number."
-        );
-
-        return;
-      }
-
-      /*
-       * IMPORTANT:
-       * Backend currently has no OTP endpoint.
-       * This only keeps the existing UI flow alive.
-       */
-
-      setOtpSent(
-        true
-      );
-
-      alert(
-        "OTP UI step enabled. Backend OTP verification is not available yet."
-      );
-    };
-
   // =======================================================
   // REGISTER
   // =======================================================
@@ -529,7 +487,6 @@ function Profile({
             "Ahilya Nagar",
           pincode: "",
           password: "",
-          otp: "",
         });
 
         setOtpSent(
@@ -1261,45 +1218,6 @@ function Profile({
                       }
                       placeholder="Enter 10 digit mobile number"
                     />
-
-                  </div>
-
-                </div>
-
-                <div className="profile-form-group">
-
-                  <label>
-                    OTP Verification
-                  </label>
-
-                  <div className="otp-row">
-
-                    <input
-                      type="text"
-                      name="otp"
-                      maxLength="6"
-                      value={
-                        registerData.otp
-                      }
-                      onChange={
-                        handleRegisterChange
-                      }
-                      placeholder="OTP UI only"
-                    />
-
-                    <button
-                      type="button"
-                      className="send-otp-button"
-                      onClick={
-                        sendOTP
-                      }
-                    >
-                      {
-                        otpSent
-                          ? "OTP Sent"
-                          : "Send OTP"
-                      }
-                    </button>
 
                   </div>
 
