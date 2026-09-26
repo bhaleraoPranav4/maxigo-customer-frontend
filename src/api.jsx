@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:8080/api";
+const API_BASE = "https://api.maxigo.in/api";
 
 const TOKEN_KEY = "maxigo_token";
 const USER_KEY = "maxigo_user";
@@ -155,11 +155,27 @@ export async function loginUser(mobile, password) {
 }
 
 export async function registerUser(payload) {
-  return apiRequest("/auth/register", {
+  const response = await apiRequest("/auth/register", {
     method: "POST",
     body: JSON.stringify(payload),
     skipAuth: true,
   });
+
+  const token =
+    response?.token ||
+    response?.jwt ||
+    response?.accessToken;
+
+  const user =
+    response?.user ||
+    response?.customer ||
+    response;
+
+  if (token) {
+    saveAuth(token, user);
+  }
+
+  return response;
 }
 
 // =========================================================
