@@ -24,6 +24,7 @@ import {
   getAddresses,
   getCart,
   getCategories,
+  getCustomerStore,
   getMyOrder,
   getMyOrders,
   getMyProfile,
@@ -426,6 +427,13 @@ function App() {
     setProducts,
   ] = useState([]);
 
+  // Store details loaded from the Customer Store API.
+  // Keyed by storeId so we do not request the same store repeatedly.
+  const [
+    storeDetailsById,
+    setStoreDetailsById,
+  ] = useState({});
+
   const [
     categories,
     setCategories,
@@ -650,6 +658,119 @@ function App() {
     loadCustomerData();
 
   }, [authenticated]);
+
+  // Load real store status and timings for Customer UI.
+  // This runs only after login + products are available.
+  useEffect(() => {
+
+    if (!authenticated || products.length === 0) {
+      return;
+    }
+
+    const storeIds = Array.from(
+      new Set(
+        products
+          .map((product) => product?.storeId)
+          .filter(
+            (storeId) =>
+              storeId !== null &&
+              storeId !== undefined &&
+              storeId !== ""
+          )
+          .map((storeId) => String(storeId))
+      )
+    );
+
+    const loadStoreDetails = async () => {
+
+      const missingStoreIds =
+        storeIds.filter(
+          (storeId) =>
+            !storeDetailsById[storeId]
+        );
+
+      if (missingStoreIds.length === 0) {
+        return;
+      }
+
+      const results = await Promise.all(
+        missingStoreIds.map(async (storeId) => {
+
+          try {
+            const data = await getCustomerStore(
+              storeId
+            );
+
+            return [storeId, data];
+
+          } catch (error) {
+            console.error(
+              `Unable to load store ${storeId}:`,
+              error
+            );
+
+            return [storeId, null];
+          }
+        })
+      );
+
+      const validResults = results.filter(
+        ([, data]) => data
+      );
+
+      if (validResults.length === 0) {
+        return;
+      }
+
+      const detailsMap = Object.fromEntries(
+        validResults
+      );
+
+      setStoreDetailsById((current) => ({
+        ...current,
+        ...detailsMap,
+      }));
+
+      setProducts((currentProducts) =>
+        currentProducts.map((product) => {
+
+          const details =
+            detailsMap[String(product?.storeId)];
+
+          if (!details) {
+            return product;
+          }
+
+          return {
+            ...product,
+            storeName:
+              details.storeName ??
+              product.storeName ??
+              `Store #${product.storeId}`,
+            storeStatus:
+              details.storeStatus ??
+              product.storeStatus ??
+              "ACTIVE",
+            storeOpeningTime:
+              details.openingTime ??
+              product.storeOpeningTime ??
+              null,
+            storeClosingTime:
+              details.closingTime ??
+              product.storeClosingTime ??
+              null,
+          };
+        })
+      );
+    };
+
+    loadStoreDetails();
+
+  }, [
+    authenticated,
+    products.length,
+    storeDetailsById,
+  ]);
 
   const loadCustomerData =
     async () => {
@@ -1038,6 +1159,84 @@ function App() {
       }
 
       // ==============================================
+      // LOAD REAL STORE DETAILS BEFORE ADD
+      // ==============================================
+
+      let currentProduct = product;
+      const storeKey = String(productStoreId);
+      let storeDetails =
+        storeDetailsById[storeKey] || null;
+
+      if (!storeDetails) {
+        try {
+          storeDetails = await getCustomerStore(
+            productStoreId
+          );
+
+          if (storeDetails) {
+            setStoreDetailsById((current) => ({
+              ...current,
+              [storeKey]: storeDetails,
+            }));
+
+            currentProduct = {
+              ...product,
+              storeName:
+                storeDetails.storeName ??
+                product.storeName ??
+                `Store #${productStoreId}`,
+              storeStatus:
+                storeDetails.storeStatus ??
+                product.storeStatus ??
+                "ACTIVE",
+              storeOpeningTime:
+                storeDetails.openingTime ??
+                product.storeOpeningTime ??
+                null,
+              storeClosingTime:
+                storeDetails.closingTime ??
+                product.storeClosingTime ??
+                null,
+            };
+
+            setProducts((currentProducts) =>
+              currentProducts.map((item) =>
+                String(item?.id) ===
+                  String(product?.id)
+                  ? currentProduct
+                  : item
+              )
+            );
+          }
+        } catch (error) {
+          alert(
+            "Unable to check store availability. Please try again."
+          );
+          return;
+        }
+      } else {
+        currentProduct = {
+          ...product,
+          storeName:
+            storeDetails.storeName ??
+            product.storeName ??
+            `Store #${productStoreId}`,
+          storeStatus:
+            storeDetails.storeStatus ??
+            product.storeStatus ??
+            "ACTIVE",
+          storeOpeningTime:
+            storeDetails.openingTime ??
+            product.storeOpeningTime ??
+            null,
+          storeClosingTime:
+            storeDetails.closingTime ??
+            product.storeClosingTime ??
+            null,
+        };
+      }
+
+      // ==============================================
       // ONE CART = ONE STORE
       // ==============================================
 
@@ -1076,7 +1275,7 @@ function App() {
           existingStoreIds.some(
             (storeId) =>
               String(storeId) !==
-              String(productStoreId)
+              String(currentProduct.storeId)
           );
 
         if (differentStore) {
@@ -1094,7 +1293,7 @@ function App() {
       // ==============================================
 
       if (
-        !isStoreOpen(product)
+        !isStoreOpen(currentProduct)
       ) {
 
         alert(
@@ -1108,7 +1307,7 @@ function App() {
 
         const response =
           await addCartItem(
-            product.id,
+            currentProduct.id,
             1
           );
 
