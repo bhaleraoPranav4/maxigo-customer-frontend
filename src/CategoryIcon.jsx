@@ -25,114 +25,39 @@ function getCategoryIconKey(category) {
     .trim()
     .toLowerCase();
 
-  if (
-    [
-      "grocery",
-      "किराना",
-      "किराणा",
-      "all",
-      "सभी",
-      "सर्व",
-    ].includes(value)
-  ) {
-    return "grocery";
-  }
-
-  if (
-    value === "beverages" ||
-    value === "पेय" ||
-    value === "पेयपदार्थ"
-  ) {
-    return "beverages";
-  }
-
-  if (
-    value === "snacks" ||
-    value === "स्नैक्स"
-  ) {
-    return "snacks";
-  }
-
-  if (
-    value === "food" ||
-    value === "खाना" ||
-    value === "खाद्यपदार्थ"
-  ) {
-    return "food";
-  }
-
-  if (
-    value === "dairy" ||
-    value === "डेयरी"
-  ) {
-    return "dairy";
-  }
-
+  if (["grocery", "किराना", "किराणा", "all", "सभी", "सर्व"].includes(value)) return "grocery";
+  if (value === "beverages" || value === "पेय" || value === "पेयपदार्थ") return "beverages";
+  if (value === "snacks" || value === "स्नैक्स") return "snacks";
+  if (value === "food" || value === "खाना" || value === "खाद्यपदार्थ") return "food";
+  if (value === "dairy" || value === "डेयरी") return "dairy";
   if (
     value.includes("vegetables") ||
     value.includes("fruits") ||
     value.includes("सब्ज़") ||
+    value.includes("सब्जी") ||
     value.includes("फळे") ||
     value.includes("भाज्या")
-  ) {
-    return "fruitsVegetables";
-  }
-
+  ) return "fruitsVegetables";
   if (
     value.includes("personal care") ||
     value.includes("पर्सनल केयर") ||
     value.includes("पर्सनल केअर")
-  ) {
-    return "personalCare";
-  }
-
+  ) return "personalCare";
   if (
     value.includes("household") ||
     value.includes("घरेलू सामान") ||
     value.includes("घरगुती वस्तू")
-  ) {
-    return "household";
-  }
-
-  if (
-    value === "juice" ||
-    value === "जूस" ||
-    value === "ज्यूस"
-  ) {
-    return "juice";
-  }
-
-  if (
-    value.includes("ice cream") ||
-    value.includes("आइसक्रीम") ||
-    value.includes("आइसक्रीम")
-  ) {
-    return "iceCream";
-  }
-
+  ) return "household";
+  if (value === "juice" || value === "जूस" || value === "ज्यूस") return "juice";
+  if (value.includes("ice cream") || value.includes("आइसक्रीम")) return "iceCream";
   if (
     value.includes("non veg") ||
     value.includes("non-veg") ||
-    value.includes("नॉन वेज")
-  ) {
-    return "nonVeg";
-  }
-
-  if (
-    value === "sweets" ||
-    value === "मिठाई" ||
-    value === "मिठाईयां"
-  ) {
-    return "sweets";
-  }
-
-  if (
-    value === "cafe" ||
-    value === "कैफे" ||
-    value === "कॅफे"
-  ) {
-    return "cafe";
-  }
+    value.includes("नॉन वेज") ||
+    value.includes("नॉन-वेज")
+  ) return "nonVeg";
+  if (value === "sweets" || value === "मिठाई" || value === "मिठाईयां") return "sweets";
+  if (value === "cafe" || value === "कैफे" || value === "कॅफे") return "cafe";
 
   return null;
 }
@@ -142,11 +67,7 @@ function CategoryIcon({ category, className = "" }) {
   const src = key ? ICONS[key] : null;
 
   if (!src) {
-    return (
-      <span className={className}>
-        {category?.icon || "🏷️"}
-      </span>
-    );
+    return <span className={className}>{category?.icon || "🏷️"}</span>;
   }
 
   return (

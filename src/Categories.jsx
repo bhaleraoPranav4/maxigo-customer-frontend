@@ -22,7 +22,6 @@ function Categories({
             <div className="customer-category-icon">
               <CategoryIcon category={category} />
             </div>
-
             <span>{category.name}</span>
           </button>
         ))}
