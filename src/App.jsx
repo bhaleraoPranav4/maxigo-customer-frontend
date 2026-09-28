@@ -26,6 +26,7 @@ import {
   getAddresses,
   getCart,
   getCategories,
+  getFirstActiveOffer,
   getCustomerStore,
   getMyOrder,
   getMyOrders,
@@ -456,6 +457,16 @@ function App() {
   ] = useState("");
 
   // =======================================================
+  // ACTIVE OFFER
+  // Admin-created active offer loaded from production API.
+  // =======================================================
+
+  const [
+    activeOffer,
+    setActiveOffer,
+  ] = useState(null);
+
+  // =======================================================
   // CART
   // =======================================================
 
@@ -588,10 +599,22 @@ function App() {
         const [
           productData,
           categoryData,
+          offerData,
         ] = await Promise.all([
           getProducts(),
           getCategories(),
+          getFirstActiveOffer().catch((offerError) => {
+            console.error(
+              "Unable to load active offer:",
+              offerError
+            );
+            return null;
+          }),
         ]);
+
+        setActiveOffer(
+          offerData || null
+        );
 
         const mappedProducts =
           Array.isArray(productData)
@@ -2187,41 +2210,106 @@ function App() {
           }
         />
 
-        <section className="banner">
+        <section
+          className="banner"
+          style={{
+            backgroundColor:
+              activeOffer?.backgroundColor ||
+              undefined,
+            backgroundImage:
+              activeOffer?.imageUrl
+                ? `url(${activeOffer.imageUrl})`
+                : undefined,
+            backgroundSize:
+              activeOffer?.imageUrl
+                ? "cover"
+                : undefined,
+            backgroundPosition:
+              activeOffer?.imageUrl
+                ? "center"
+                : undefined,
+          }}
+        >
 
           <div className="banner-content">
 
             <p className="banner-small">
-              {t('MAXIGO SPECIAL')}
+              {activeOffer?.title
+                ? t('MAXIGO SPECIAL')
+                : t('MAXIGO SPECIAL')}
             </p>
 
             <h2>
-              {t('Fresh Essentials')}
-              <br />
-              Delivered in{" "}
-              <span>
-                {t('Minutes!')}
-              </span>
+              {activeOffer?.title ||
+                `${t('Fresh Essentials')} ${t('Delivered in')} ${t('Minutes!')}`}
             </h2>
 
             <p>
-              Fruits, Vegetables,
-              Groceries & More
+              {activeOffer?.subtitle ||
+                "Fruits, Vegetables, Groceries & More"}
             </p>
 
             <button
               type="button"
               onClick={() => {
+                const link =
+                  activeOffer?.buttonLink ||
+                  "";
+
+                if (
+                  link.startsWith("http://") ||
+                  link.startsWith("https://")
+                ) {
+                  window.open(
+                    link,
+                    "_blank",
+                    "noopener,noreferrer"
+                  );
+                  return;
+                }
+
                 setSelectedCategory(
                   "all"
                 );
+
                 setSelectedStoreId(
                   null
                 );
+
                 setSearch("");
+
+                setActivePage(
+                  "home"
+                );
+
+                setTimeout(() => {
+                  document
+                    .querySelector(
+                      ".products-section"
+                    )
+                    ?.scrollIntoView({
+                      behavior:
+                        "smooth",
+                      block:
+                        "start",
+                    });
+                }, 100);
+
+                if (
+                  link &&
+                  link !== "/" &&
+                  link !== "/products"
+                ) {
+                  window.location.hash =
+                    link.startsWith("#")
+                      ? link
+                      : `#${link}`;
+                }
               }}
             >
-              {t('Shop Now →')}
+              {activeOffer?.buttonText
+                ? `${activeOffer.buttonText} →`
+                : t('Shop Now →')}
             </button>
 
           </div>
@@ -2229,11 +2317,13 @@ function App() {
           <div className="offer">
 
             <small>
-              UP TO
+              {activeOffer?.discountText ||
+                "UP TO"}
             </small>
 
             <strong>
-              50%
+              {activeOffer?.discount ??
+                50}%
             </strong>
 
             <small>
