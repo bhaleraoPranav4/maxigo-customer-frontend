@@ -139,35 +139,202 @@ function mapProduct(product) {
       ? Number(product.discountPrice)
       : Number(product?.price || 0);
 
+  const store =
+    product?.store ||
+    product?.storeDetails ||
+    {};
+
   return {
-    id: product.id,
-    name: product.name || "Product",
+    id: product?.id,
+    name: product?.name || "Product",
+
     quantity:
-      product.unit ||
+      product?.unit ||
       "1 Unit",
+
     price,
+
     categoryId:
-      product.categoryId,
+      product?.categoryId ??
+      product?.category?.id ??
+      product?.category?.categoryId ??
+      null,
+
     brand:
-      product.brand || "",
+      product?.brand || "",
+
     description:
-      product.description || "",
+      product?.description || "",
+
     stock:
-      product.stock ?? 0,
+      product?.stock ?? 0,
+
     isActive:
-      product.isActive !== false,
+      product?.isActive !== false,
+
     status:
-      product.status || "ACTIVE",
+      product?.status || "ACTIVE",
+
     image:
       getProductImage(product),
+
     time:
       "15 MIN",
+
+    // ==============================
+    // STORE DETAILS
+    // ==============================
+
+    storeId:
+      product?.storeId ??
+      product?.store_id ??
+      store?.id ??
+      store?.storeId ??
+      store?.store_id ??
+      null,
+
+    storeName:
+      product?.storeName ??
+      product?.store_name ??
+      store?.name ??
+      store?.storeName ??
+      store?.store_name ??
+      "",
+
+    storeStatus:
+      product?.storeStatus ??
+      product?.store_status ??
+      store?.status ??
+      store?.storeStatus ??
+      store?.store_status ??
+      "ACTIVE",
+
+    storeOpeningTime:
+      product?.openingTime ??
+      product?.storeOpeningTime ??
+      product?.store_opening_time ??
+      store?.openingTime ??
+      store?.opening_time ??
+      store?.storeOpeningTime ??
+      null,
+
+    storeClosingTime:
+      product?.closingTime ??
+      product?.storeClosingTime ??
+      product?.store_closing_time ??
+      store?.closingTime ??
+      store?.closing_time ??
+      store?.storeClosingTime ??
+      null,
+
     raw:
       product,
   };
 }
 
 // =========================================================
+// =========================================================
+// STORE AVAILABILITY
+// =========================================================
+
+function timeToMinutes(value) {
+
+  if (!value) {
+    return null;
+  }
+
+  const parts =
+    String(value)
+      .trim()
+      .split(":");
+
+  if (parts.length < 2) {
+    return null;
+  }
+
+  const hours = Number(parts[0]);
+  const minutes = Number(parts[1]);
+
+  if (
+    !Number.isFinite(hours) ||
+    !Number.isFinite(minutes) ||
+    hours < 0 ||
+    hours > 23 ||
+    minutes < 0 ||
+    minutes > 59
+  ) {
+    return null;
+  }
+
+  return (
+    hours * 60 +
+    minutes
+  );
+}
+
+function isStoreOpen(product) {
+
+  const status =
+    String(
+      product?.storeStatus ||
+      "ACTIVE"
+    )
+      .trim()
+      .toUpperCase();
+
+  if (
+    ["CLOSED", "INACTIVE", "OFFLINE", "DISABLED"]
+      .includes(status)
+  ) {
+    return false;
+  }
+
+  const opening =
+    timeToMinutes(
+      product?.storeOpeningTime
+    );
+
+  const closing =
+    timeToMinutes(
+      product?.storeClosingTime
+    );
+
+  // Keep the existing behaviour when the API
+  // does not provide store timing.
+  if (
+    opening === null ||
+    closing === null
+  ) {
+    return true;
+  }
+
+  const now = new Date();
+
+  const currentMinutes =
+    now.getHours() * 60 +
+    now.getMinutes();
+
+  // Same-day schedule: 09:00 -> 22:00
+  if (opening < closing) {
+    return (
+      currentMinutes >= opening &&
+      currentMinutes < closing
+    );
+  }
+
+  // Overnight schedule: 18:00 -> 02:00
+  if (opening > closing) {
+    return (
+      currentMinutes >= opening ||
+      currentMinutes < closing
+    );
+  }
+
+  // Same opening/closing value:
+  // do not unexpectedly close the store.
+  return true;
+}
+
 // CATEGORY MAPPER
 // =========================================================
 
@@ -213,6 +380,16 @@ function App() {
     selectedCategory,
     setSelectedCategory,
   ] = useState("all");
+
+  const [
+    selectedStoreId,
+    setSelectedStoreId,
+  ] = useState(null);
+
+  const [
+    availabilityTick,
+    setAvailabilityTick,
+  ] = useState(0);
 
   const [search, setSearch] =
     useState("");
@@ -370,6 +547,21 @@ function App() {
   useEffect(() => {
 
     loadPublicData();
+
+  }, []);
+
+  // Refresh OPEN/CLOSED UI every 30 seconds.
+  useEffect(() => {
+
+    const timer =
+      setInterval(() => {
+        setAvailabilityTick(
+          (value) => value + 1
+        );
+      }, 30000);
+
+    return () =>
+      clearInterval(timer);
 
   }, []);
 
@@ -551,6 +743,27 @@ function App() {
                 imageUrl:
                   item.productImage,
               }),
+
+            storeId:
+              item?.storeId ??
+              item?.store_id ??
+              products.find(
+                (product) =>
+                  String(product.id) ===
+                  String(item.productId)
+              )?.storeId ??
+              null,
+
+            storeName:
+              item?.storeName ??
+              item?.store_name ??
+              products.find(
+                (product) =>
+                  String(product.id) ===
+                  String(item.productId)
+              )?.storeName ??
+              "",
+
             quantityInCart:
               quantity,
             subTotal:
@@ -593,14 +806,123 @@ function App() {
         categoryId
       );
 
+      setSelectedStoreId(
+        null
+      );
+
       setSearch("");
 
       setActivePage("home");
     };
 
-  // =======================================================
   // SEARCH + FILTER
   // =======================================================
+
+  const categoryStores =
+    useMemo(() => {
+
+      if (
+        selectedCategory ===
+        "all"
+      ) {
+        return [];
+      }
+
+      const storeMap =
+        new Map();
+
+      products
+        .filter(
+          (product) =>
+            String(
+              product?.categoryId
+            ) ===
+            String(
+              selectedCategory
+            )
+        )
+        .forEach(
+          (product) => {
+
+            const storeId =
+              product?.storeId;
+
+            if (
+              storeId === null ||
+              storeId === undefined ||
+              storeId === ""
+            ) {
+              return;
+            }
+
+            const key =
+              String(storeId);
+
+            if (
+              !storeMap.has(key)
+            ) {
+
+              storeMap.set(
+                key,
+                {
+                  id:
+                    storeId,
+
+                  name:
+                    product?.storeName ||
+                    `Store #${storeId}`,
+
+                  status:
+                    product?.storeStatus ||
+                    "ACTIVE",
+
+                  openingTime:
+                    product?.storeOpeningTime,
+
+                  closingTime:
+                    product?.storeClosingTime,
+
+                  productCount:
+                    0,
+                }
+              );
+            }
+
+            const store =
+              storeMap.get(key);
+
+            store.productCount +=
+              1;
+          }
+        );
+
+      return Array.from(
+        storeMap.values()
+      ).map((store) => {
+
+        const sampleProduct =
+          products.find(
+            (product) =>
+              String(product?.storeId) ===
+              String(store.id) &&
+              String(product?.categoryId) ===
+              String(selectedCategory)
+          );
+
+        return {
+          ...store,
+          open:
+            sampleProduct
+              ? isStoreOpen(sampleProduct)
+              : false,
+        };
+      });
+
+    }, [
+      products,
+      selectedCategory,
+      availabilityTick,
+    ]);
 
   const filteredProducts =
     useMemo(() => {
@@ -619,11 +941,24 @@ function App() {
             String(
               product.categoryId
             ) ===
-              String(
-                selectedCategory
-              );
+            String(
+              selectedCategory
+            );
 
           if (!categoryMatch) {
+            return false;
+          }
+
+          const storeMatch =
+            selectedStoreId === null ||
+            String(
+              product.storeId
+            ) ===
+            String(
+              selectedStoreId
+            );
+
+          if (!storeMatch) {
             return false;
           }
 
@@ -649,9 +984,10 @@ function App() {
       products,
       search,
       selectedCategory,
+      selectedStoreId,
+      availabilityTick,
     ]);
 
-  // =======================================================
   // AUTH CHECK
   // =======================================================
 
@@ -685,6 +1021,89 @@ function App() {
         return;
       }
 
+      const productStoreId =
+        product?.storeId;
+
+      if (
+        productStoreId === null ||
+        productStoreId === undefined ||
+        productStoreId === ""
+      ) {
+
+        alert(
+          "Store information is not available for this product."
+        );
+
+        return;
+      }
+
+      // ==============================================
+      // ONE CART = ONE STORE
+      // ==============================================
+
+      if (cart.length > 0) {
+
+        const existingStoreIds =
+          cart
+            .map((item) => {
+
+              if (
+                item?.storeId !== null &&
+                item?.storeId !== undefined &&
+                item?.storeId !== ""
+              ) {
+                return item.storeId;
+              }
+
+              return products.find(
+                (currentProduct) =>
+                  String(
+                    currentProduct.id
+                  ) ===
+                  String(
+                    item.id
+                  )
+              )?.storeId;
+            })
+            .filter(
+              (id) =>
+                id !== null &&
+                id !== undefined &&
+                id !== ""
+            );
+
+        const differentStore =
+          existingStoreIds.some(
+            (storeId) =>
+              String(storeId) !==
+              String(productStoreId)
+          );
+
+        if (differentStore) {
+
+          alert(
+            "You can select products from one store only. Please clear the current cart before selecting a product from another store."
+          );
+
+          return;
+        }
+      }
+
+      // ==============================================
+      // STORE OPEN/CLOSE
+      // ==============================================
+
+      if (
+        !isStoreOpen(product)
+      ) {
+
+        alert(
+          "This time not available. The store is currently closed."
+        );
+
+        return;
+      }
+
       try {
 
         const response =
@@ -707,6 +1126,46 @@ function App() {
     };
 
   // =======================================================
+  // HOME PRODUCT -> OPEN STORE -> ADD
+  // =======================================================
+
+  const openStoreAndThenAdd =
+    async (product) => {
+
+      const productStoreId =
+        product?.storeId;
+
+      if (
+        productStoreId === null ||
+        productStoreId === undefined ||
+        productStoreId === ""
+      ) {
+        // Keep the existing store-information validation in addToCart.
+        await addToCart(product);
+        return;
+      }
+
+      // First open the product's category/store view.
+      setSelectedCategory(
+        product.categoryId
+      );
+
+      setSelectedStoreId(
+        productStoreId
+      );
+
+      setSearch("");
+      setActivePage("home");
+
+      // Give React time to render the selected store view first.
+      await new Promise((resolve) =>
+        setTimeout(resolve, 180)
+      );
+
+      // Then run the existing cart validation + ADD flow.
+      await addToCart(product);
+    };
+
   // INCREASE
   // =======================================================
 
@@ -1553,6 +2012,9 @@ function App() {
                 setSelectedCategory(
                   "all"
                 );
+                setSelectedStoreId(
+                  null
+                );
                 setSearch("");
               }}
             >
@@ -1579,6 +2041,107 @@ function App() {
 
         </section>
 
+        {selectedCategory !== "all" &&
+          selectedStoreId === null && (
+
+            <section className="store-list-section">
+
+              <div className="section-title">
+
+                <h2>
+                  Select Store
+                </h2>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedCategory("all");
+                    setSelectedStoreId(null);
+                    setSearch("");
+                  }}
+                >
+                  View All →
+                </button>
+
+              </div>
+
+              {categoryStores.length === 0 ? (
+
+                <div className="no-products">
+
+                  <div>
+                    🏪
+                  </div>
+
+                  <h3>
+                    No stores available
+                  </h3>
+
+                  <p>
+                    No store information is available for this category.
+                  </p>
+
+                </div>
+
+              ) : (
+
+                <div className="store-grid">
+
+                  {categoryStores.map(
+                    (store) => (
+
+                      <button
+                        type="button"
+                        key={String(store.id)}
+                        className="store-card"
+                        onClick={() => {
+
+                          setSelectedStoreId(
+                            store.id
+                          );
+
+                          setSearch("");
+                        }}
+                      >
+
+                        <div className="store-card-icon">
+                          🏪
+                        </div>
+
+                        <div className="store-card-content">
+
+                          <h3>
+                            {store.name}
+                          </h3>
+
+                          <p>
+                            {store.productCount} products
+                          </p>
+
+                          <span
+                            className={
+                              store.open
+                                ? "store-open"
+                                : "store-closed"
+                            }
+                          >
+                            {store.open
+                              ? "OPEN"
+                              : "CLOSED"}
+                          </span>
+
+                        </div>
+
+                      </button>
+                    )
+                  )}
+
+                </div>
+              )}
+
+            </section>
+          )}
+
         <section className="products-section">
 
           <div className="section-title">
@@ -1586,8 +2149,16 @@ function App() {
             <h2>
 
               {
-                selectedCategory ===
-                "all"
+                selectedStoreId !== null
+                  ? categoryStores.find(
+                      (store) =>
+                        String(store.id) ===
+                        String(selectedStoreId)
+                    )?.name ||
+                    "Store Products"
+
+                  : selectedCategory ===
+                    "all"
 
                   ? search
                     ? "Search Results"
@@ -1607,17 +2178,31 @@ function App() {
 
             </h2>
 
-            <button
-              type="button"
-              onClick={() => {
-                setSelectedCategory(
-                  "all"
-                );
-                setSearch("");
-              }}
-            >
-              See All →
-            </button>
+            {selectedStoreId !== null ? (
+
+              <button
+                type="button"
+                onClick={() =>
+                  setSelectedStoreId(null)
+                }
+              >
+                ← Back to Stores
+              </button>
+
+            ) : (
+
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedCategory("all");
+                  setSelectedStoreId(null);
+                  setSearch("");
+                }}
+              >
+                See All →
+              </button>
+
+            )}
 
           </div>
 
@@ -1765,13 +2350,29 @@ function App() {
 
                           <button
                             type="button"
-                            onClick={() =>
-                              addToCart(
+                            disabled={
+                              !isStoreOpen(
                                 product
                               )
                             }
+                            onClick={() =>
+                              selectedStoreId ===
+                                null
+                                ? openStoreAndThenAdd(
+                                    product
+                                  )
+                                : addToCart(
+                                    product
+                                  )
+                            }
                           >
-                            ADD
+                            {
+                              isStoreOpen(
+                                product
+                              )
+                                ? "ADD"
+                                : "This time not available"
+                            }
                           </button>
 
                         </div>
@@ -2033,6 +2634,18 @@ function App() {
                           item.quantity
                         }
                       </p>
+
+                      {item.storeName && (
+                        <small
+                          style={{
+                            display: "block",
+                            marginTop: "4px",
+                            opacity: 0.7,
+                          }}
+                        >
+                          {item.storeName}
+                        </small>
+                      )}
 
                       <strong>
                         ₹

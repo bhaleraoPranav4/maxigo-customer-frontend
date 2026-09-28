@@ -191,6 +191,16 @@ export const getProduct = (id) =>
 export const getCategories = () =>
   apiRequest("/categories", { skipAuth: true });
 
+
+// =========================================================
+// CUSTOMER STORE
+// =========================================================
+
+export const getCustomerStore = (storeId) =>
+  apiRequest(
+    `/customer/stores/${Number(storeId)}`
+  );
+
 // =========================================================
 // CUSTOMER PROFILE
 // =========================================================
