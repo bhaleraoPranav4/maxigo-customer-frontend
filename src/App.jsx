@@ -14,6 +14,8 @@ import PaymentMethods from "./PaymentMethods";
 import TrackOrder from "./TrackOrder";
 import Referral from "./Referral";
 import Wallet from "./Wallet";
+import { useLanguage } from "./LanguageContext.jsx";
+import CategoryIcon from "./CategoryIcon.jsx";
 
 import {
   addCartItem,
@@ -369,6 +371,8 @@ function mapCategory(
 }
 
 function App() {
+
+  const { t } = useLanguage();
 
   // =======================================================
   // PAGE
@@ -2058,7 +2062,7 @@ function App() {
                   )
                 }
               >
-                Continue to Payment →
+                {t('Continue to Payment →')}
               </button>
 
             </div>
@@ -2110,7 +2114,7 @@ function App() {
               <div>
 
                 <small>
-                  Delivery to
+                  {t('Delivery to')}
                 </small>
 
                 <b>
@@ -2188,15 +2192,15 @@ function App() {
           <div className="banner-content">
 
             <p className="banner-small">
-              MAXIGO SPECIAL
+              {t('MAXIGO SPECIAL')}
             </p>
 
             <h2>
-              Fresh Essentials
+              {t('Fresh Essentials')}
               <br />
               Delivered in{" "}
               <span>
-                Minutes!
+                {t('Minutes!')}
               </span>
             </h2>
 
@@ -2217,7 +2221,7 @@ function App() {
                 setSearch("");
               }}
             >
-              Shop Now →
+              {t('Shop Now →')}
             </button>
 
           </div>
@@ -2259,7 +2263,7 @@ function App() {
                     setSearch("");
                   }}
                 >
-                  View All →
+                  {t('View All →')}
                 </button>
 
               </div>
@@ -2360,8 +2364,8 @@ function App() {
                     "all"
 
                   ? search
-                    ? "Search Results"
-                    : "Top Picks for You"
+                    ? t("Search Results")
+                    : t("Top Picks for You")
 
                   : categories.find(
                       (category) =>
@@ -2372,7 +2376,7 @@ function App() {
                           selectedCategory
                         )
                     )?.name ||
-                    "Products"
+                    t("Products")
               }
 
             </h2>
@@ -2398,7 +2402,7 @@ function App() {
                   setSearch("");
                 }}
               >
-                See All →
+                {t('See All →')}
               </button>
 
             )}
@@ -2414,7 +2418,7 @@ function App() {
               </div>
 
               <h3>
-                Loading products...
+                {t('Loading products...')}
               </h3>
 
             </div>
@@ -2428,7 +2432,7 @@ function App() {
               </div>
 
               <h3>
-                Unable to load products
+                {t('Unable to load products')}
               </h3>
 
               <p>
@@ -2442,7 +2446,7 @@ function App() {
                   loadPublicData
                 }
               >
-                Retry
+                {t('Retry')}
               </button>
 
             </div>
@@ -2457,7 +2461,7 @@ function App() {
               </div>
 
               <h3>
-                No products found
+                {t('No products found')}
               </h3>
 
               <p>
@@ -2613,7 +2617,7 @@ function App() {
                 )
               }
             >
-              See All →
+              {t('See All →')}
             </button>
 
           </div>
@@ -2638,10 +2642,8 @@ function App() {
                     }
                   >
 
-                    <div>
-                      {
-                        category.icon
-                      }
+                    <div className="shop-category-icon-image-wrap">
+                      <CategoryIcon category={category} />
                     </div>
 
                     <span>
@@ -2674,7 +2676,7 @@ function App() {
         <div className="page-header">
 
           <h2>
-            All Categories
+            {t('All Categories')}
           </h2>
 
           <button
@@ -2715,9 +2717,7 @@ function App() {
                 >
 
                   <div className="big-category-icon">
-                    {
-                      category.icon
-                    }
+                    <CategoryIcon category={category} />
                   </div>
 
                   <span>
@@ -2951,7 +2951,7 @@ function App() {
                   proceedToCheckout
                 }
               >
-                Proceed to Checkout
+                {t('Proceed to Checkout')}
               </button>
 
             </div>
@@ -2972,7 +2972,7 @@ function App() {
 
       {activePage ===
         "home" && (
-        <HomePage />
+        HomePage()
       )}
 
       {activePage ===
@@ -3150,7 +3150,7 @@ function App() {
             ⌂
           </span>
 
-          Home
+          {t('Home')}
 
         </button>
 
@@ -3179,7 +3179,7 @@ function App() {
             ⌕
           </span>
 
-          Search
+          {t('Search')}
 
         </button>
 
@@ -3202,7 +3202,7 @@ function App() {
             ▦
           </span>
 
-          Categories
+          {t('Categories')}
 
         </button>
 
@@ -3235,7 +3235,7 @@ function App() {
             ▤
           </span>
 
-          Orders
+          {t('Orders')}
 
         </button>
 
@@ -3258,7 +3258,7 @@ function App() {
             ♙
           </span>
 
-          Profile
+          {t('Profile')}
 
         </button>
 

@@ -4,6 +4,7 @@ import {
 } from "react";
 
 import "./Profile.css";
+import { useLanguage } from "./LanguageContext.jsx";
 
 import {
   clearAuth,
@@ -39,6 +40,37 @@ function Profile({
     activeModal,
     setActiveModal,
   ] = useState(null);
+
+  // =======================================================
+  // LANGUAGE
+  // =======================================================
+
+  const {
+    language,
+    changeLanguage,
+    t,
+  } = useLanguage();
+
+  const [
+    showLanguage,
+    setShowLanguage,
+  ] = useState(false);
+
+  const languageLabel =
+    language === "hi"
+      ? "हिन्दी"
+      : language === "mr"
+      ? "मराठी"
+      : "English";
+
+  const chooseLanguage = (value) => {
+    if (!["en", "hi", "mr"].includes(value)) {
+      return;
+    }
+
+    changeLanguage(value);
+    setShowLanguage(false);
+  };
 
   // =======================================================
   // LOGIN
@@ -922,11 +954,11 @@ function Profile({
             </div>
 
             <h2>
-              WELCOME TO MAXIGO
+              {t('WELCOME TO MAXIGO')}
             </h2>
 
             <p>
-              Login or register to manage your account.
+              {t('Login or register to manage your account.')}
             </p>
 
             <div className="auth-buttons">
@@ -940,7 +972,7 @@ function Profile({
                   )
                 }
               >
-                Login
+                {t('Login')}
               </button>
 
               <button
@@ -952,7 +984,7 @@ function Profile({
                   )
                 }
               >
-                Register
+                {t('Register')}
               </button>
 
             </div>
@@ -976,7 +1008,7 @@ function Profile({
               </span>
 
               <span className="profile-option-title">
-                My Addresses
+                {t('My Addresses')}
               </span>
 
               <span className="profile-arrow">
@@ -1000,7 +1032,7 @@ function Profile({
               </span>
 
               <span className="profile-option-title">
-                Payment Methods
+                {t('Payment Methods')}
               </span>
 
               <span className="profile-arrow">
@@ -1024,7 +1056,7 @@ function Profile({
               </span>
 
               <span className="profile-option-title">
-                My Wishlist
+                {t('My Wishlist')}
               </span>
 
               <span className="profile-arrow">
@@ -1059,7 +1091,7 @@ function Profile({
               </button>
 
               <h2>
-                Login
+                {t('Login')}
               </h2>
 
               <p className="profile-modal-subtitle">
@@ -1126,7 +1158,7 @@ function Profile({
                   type="submit"
                   className="submit-profile"
                 >
-                  Login
+                  {t('Login')}
                 </button>
 
               </form>
@@ -1414,7 +1446,7 @@ function Profile({
                 );
               }}
             >
-              Edit Profile
+              {t('Edit Profile')}
             </button>
 
             <button
@@ -1424,7 +1456,7 @@ function Profile({
                 handleLogout
               }
             >
-              Logout
+              {t('Logout')}
             </button>
 
           </div>
@@ -1452,7 +1484,7 @@ function Profile({
             </span>
 
             <span className="profile-option-title">
-              My Addresses
+              {t('My Addresses')}
             </span>
 
             <span className="profile-arrow">
@@ -1476,7 +1508,7 @@ function Profile({
             </span>
 
             <span className="profile-option-title">
-              Payment Methods
+              {t('Payment Methods')}
             </span>
 
             <span className="profile-arrow">
@@ -1500,7 +1532,7 @@ function Profile({
             </span>
 
             <span className="profile-option-title">
-              My Wishlist
+              {t('My Wishlist')}
             </span>
 
             <span className="profile-arrow">
@@ -1522,7 +1554,7 @@ function Profile({
             </span>
 
             <span className="profile-option-title">
-              Refer & Earn
+              {t('Refer & Earn')}
             </span>
 
             <span className="profile-arrow">
@@ -1544,7 +1576,7 @@ function Profile({
             </span>
 
             <span className="profile-option-title">
-              MaxiGo Wallet
+              {t('MaxiGo Wallet')}
             </span>
 
             <span className="profile-arrow">
@@ -1568,7 +1600,33 @@ function Profile({
             </span>
 
             <span className="profile-option-title">
-              Settings
+              {t('Settings')}
+            </span>
+
+            <span className="profile-arrow">
+              →
+            </span>
+
+          </button>
+
+          {/* LANGUAGE */}
+          <button
+            type="button"
+            className="profile-option"
+            onClick={() =>
+              setShowLanguage(true)
+            }
+          >
+
+            <span className="profile-option-icon language-action">
+              🌐
+            </span>
+
+            <span className="profile-option-title">
+              {t('Language')}
+              <small className="profile-language-current">
+                {languageLabel}
+              </small>
             </span>
 
             <span className="profile-arrow">
@@ -1605,7 +1663,7 @@ function Profile({
             </button>
 
             <h2>
-              Edit Profile
+              {t('Edit Profile')}
             </h2>
 
             <p className="profile-modal-subtitle">
@@ -1776,7 +1834,7 @@ function Profile({
             </button>
 
             <h2>
-              My Addresses
+              {t('My Addresses')}
             </h2>
 
             <p className="profile-modal-subtitle">
@@ -2206,7 +2264,7 @@ function Profile({
             </button>
 
             <h2>
-              Payment Methods
+              {t('Payment Methods')}
             </h2>
 
             <p className="profile-modal-subtitle">
@@ -2423,7 +2481,7 @@ function Profile({
             </button>
 
             <h2>
-              My Wishlist
+              {t('My Wishlist')}
             </h2>
 
             <p className="profile-modal-subtitle">
@@ -2536,6 +2594,133 @@ function Profile({
       )}
 
       {/* =================================================== */}
+      {/* LANGUAGE */}
+      {/* =================================================== */}
+
+      {showLanguage && (
+        <div
+          className="profile-overlay"
+          onClick={() =>
+            setShowLanguage(false)
+          }
+        >
+
+          <div
+            className="profile-language-modal"
+            onClick={(e) =>
+              e.stopPropagation()
+            }
+          >
+
+            <button
+              type="button"
+              className="profile-modal-close"
+              onClick={() =>
+                setShowLanguage(false)
+              }
+              aria-label="Close language selector"
+            >
+              ✕
+            </button>
+
+            <div className="profile-language-header">
+              <div>
+
+                <p>
+                  {t("Language")}
+                </p>
+
+                <h2>
+                  {t('Choose Language')}
+                </h2>
+
+              </div>
+            </div>
+
+            <button
+              type="button"
+              className={
+                language === "en"
+                  ? "profile-language-option selected"
+                  : "profile-language-option"
+              }
+              onClick={() =>
+                chooseLanguage("en")
+              }
+            >
+
+              <span className="language-option-flag">
+                🇬🇧
+              </span>
+
+              <strong>
+                {t('English')}
+              </strong>
+
+              {language === "en" && (
+                <b>✓</b>
+              )}
+
+            </button>
+
+            <button
+              type="button"
+              className={
+                language === "hi"
+                  ? "profile-language-option selected"
+                  : "profile-language-option"
+              }
+              onClick={() =>
+                chooseLanguage("hi")
+              }
+            >
+
+              <span className="language-option-flag">
+                🇮🇳
+              </span>
+
+              <strong>
+                {t('हिन्दी')}
+              </strong>
+
+              {language === "hi" && (
+                <b>✓</b>
+              )}
+
+            </button>
+
+            <button
+              type="button"
+              className={
+                language === "mr"
+                  ? "profile-language-option selected"
+                  : "profile-language-option"
+              }
+              onClick={() =>
+                chooseLanguage("mr")
+              }
+            >
+
+              <span className="language-option-flag">
+                🇮🇳
+              </span>
+
+              <strong>
+                {t('मराठी')}
+              </strong>
+
+              {language === "mr" && (
+                <b>✓</b>
+              )}
+
+            </button>
+
+          </div>
+
+        </div>
+      )}
+
+      {/* =================================================== */}
       {/* SETTINGS */}
       {/* =================================================== */}
 
@@ -2559,7 +2744,7 @@ function Profile({
             </button>
 
             <h2>
-              Settings
+              {t('Settings')}
             </h2>
 
             <p className="profile-modal-subtitle">
@@ -2600,7 +2785,7 @@ function Profile({
                 </span>
 
                 <span className="profile-option-title">
-                  Logout
+                  {t('Logout')}
                 </span>
 
                 <span>

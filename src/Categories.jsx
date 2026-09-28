@@ -1,7 +1,8 @@
 import "./Categories.css";
+import CategoryIcon from "./CategoryIcon.jsx";
 
 function Categories({
-  categories = [],
+  categories,
   selectedCategory,
   onCategoryClick,
   onSeeAll,
@@ -9,59 +10,33 @@ function Categories({
   return (
     <section className="customer-categories-section">
       <div className="customer-categories">
+        {categories.map((category) => (
+          <button
+            type="button"
+            key={category.id}
+            className={`customer-category ${
+              selectedCategory === category.id ? "active" : ""
+            }`}
+            onClick={() => onCategoryClick(category.id)}
+          >
+            <div className="customer-category-icon">
+              <CategoryIcon category={category} />
+            </div>
 
-        {categories.map(
-          (category) => (
-
-            <button
-              type="button"
-              key={category.id}
-              className={`customer-category ${
-                String(
-                  selectedCategory
-                ) ===
-                String(
-                  category.id
-                )
-                  ? "active"
-                  : ""
-              }`}
-              onClick={() =>
-                onCategoryClick(
-                  category.id
-                )
-              }
-            >
-
-              <div className="customer-category-icon">
-                {category.icon}
-              </div>
-
-              <span>
-                {category.name}
-              </span>
-
-            </button>
-
-          )
-        )}
-
+            <span>{category.name}</span>
+          </button>
+        ))}
       </div>
 
       {onSeeAll && (
-
         <button
           type="button"
           className="customer-category-see-all"
-          onClick={
-            onSeeAll
-          }
+          onClick={onSeeAll}
         >
           See All →
         </button>
-
       )}
-
     </section>
   );
 }
