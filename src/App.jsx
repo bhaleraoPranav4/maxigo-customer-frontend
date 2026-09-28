@@ -2191,6 +2191,37 @@ function App() {
             }
           />
 
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              padding: "8px 12px 12px",
+            }}
+          >
+            <a
+              href="/downloads/maxigo-customer.apk"
+              download="maxigo-customer.apk"
+              aria-label="Download MaxiGo Customer App"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px",
+                minHeight: "42px",
+                padding: "0 18px",
+                borderRadius: "12px",
+                background: "#6738ee",
+                color: "#ffffff",
+                textDecoration: "none",
+                fontSize: "13px",
+                fontWeight: 800,
+                boxShadow: "0 8px 18px rgba(103, 56, 238, 0.20)",
+              }}
+            >
+              📱 Download Customer App
+            </a>
+          </div>
+
         </header>
 
         <Categories
