@@ -4,6 +4,8 @@ import {
   useState,
 } from "react";
 
+import { Geolocation } from "@capacitor/geolocation";
+
 import "./App.css";
 
 import Search from "./Search";
@@ -1469,107 +1471,81 @@ function App() {
   // LOCATION
   // =======================================================
 
-  const getCustomerLiveLocation =
-    () => {
+  const getCustomerLiveLocation = async () => {
+    if (!requireLogin()) {
+      return;
+    }
 
-      if (!requireLogin()) {
-        return;
-      }
+    setLocationStatus("loading");
+    setLocationError("");
+    setActivePage("location");
+
+    try {
+      const permission =
+        await Geolocation.requestPermissions();
 
       if (
-        !navigator.geolocation
+        permission.location !== "granted" &&
+        permission.coarseLocation !== "granted"
       ) {
-
-        setLocationStatus(
-          "error"
-        );
-
+        setLocationStatus("error");
         setLocationError(
-          "Live location is not supported by this browser."
+          "Location permission is required. Please tap Allow Location and allow MaxiGo to access your location."
         );
-
-        setActivePage(
-          "location"
-        );
-
         return;
       }
 
-      setLocationStatus(
-        "loading"
-      );
-
-      setLocationError("");
-
-      setActivePage(
-        "location"
-      );
-
-      navigator.geolocation.getCurrentPosition(
-
-        (position) => {
-
-          const location = {
-            latitude:
-              position.coords.latitude,
-            longitude:
-              position.coords.longitude,
-            accuracy:
-              Math.round(
-                position.coords.accuracy
-              ),
-            capturedAt:
-              new Date().toLocaleString(),
-            mapsUrl:
-              `https://www.google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`,
-          };
-
-          setCustomerLocation(
-            location
-          );
-
-          setLocationStatus(
-            "success"
-          );
-        },
-
-        (error) => {
-
-          let message =
-            "Unable to get your location.";
-
-          if (error.code === 1) {
-
-            message =
-              "Location permission was denied. Please allow location access.";
-
-          } else if (error.code === 2) {
-
-            message =
-              "Your location is currently unavailable.";
-
-          } else if (error.code === 3) {
-
-            message =
-              "Location request timed out.";
-          }
-
-          setLocationError(
-            message
-          );
-
-          setLocationStatus(
-            "error"
-          );
-        },
-
-        {
+      const position =
+        await Geolocation.getCurrentPosition({
           enableHighAccuracy: true,
           timeout: 15000,
           maximumAge: 0,
-        }
-      );
-    };
+        });
+
+      const latitude =
+        position.coords.latitude;
+      const longitude =
+        position.coords.longitude;
+      const accuracy =
+        position.coords.accuracy;
+
+      const location = {
+        latitude,
+        longitude,
+        accuracy: Math.round(accuracy),
+        capturedAt: new Date().toLocaleString(),
+        mapsUrl:
+          `https://www.google.com/maps?q=${latitude},${longitude}`,
+      };
+
+      setCustomerLocation(location);
+      setLocationStatus("success");
+      setLocationError("");
+    } catch (error) {
+      console.error("Location error:", error);
+
+      let message =
+        "Unable to get your current location.";
+
+      const errorMessage =
+        error?.message?.toLowerCase() || "";
+
+      if (errorMessage.includes("permission")) {
+        message =
+          "Location permission is required. Please tap Allow Location and allow MaxiGo to access your location.";
+      } else if (errorMessage.includes("timeout")) {
+        message =
+          "Location request timed out. Please make sure your phone's Location/GPS is turned on and try again.";
+      } else {
+        message =
+          error?.message ||
+          "Your location is currently unavailable. Please try again.";
+      }
+
+      setLocationError(message);
+      setLocationStatus("error");
+    }
+  };
 
   // =======================================================
   // CHECKOUT
@@ -1602,7 +1578,10 @@ function App() {
         return;
       }
 
-      getCustomerLiveLocation();
+      setCustomerLocation(null);
+      setLocationError("");
+      setLocationStatus("idle");
+      setActivePage("location");
     };
 
   // =======================================================
@@ -1910,6 +1889,7 @@ function App() {
         <div className="page-header">
 
           <div>
+
             <h2>
               Delivery Location
             </h2>
@@ -1918,6 +1898,7 @@ function App() {
               Your current location
               is required before checkout.
             </p>
+
           </div>
 
           <button
@@ -1932,6 +1913,49 @@ function App() {
           </button>
 
         </div>
+
+
+        {/* IDLE - ASK CUSTOMER TO ALLOW LOCATION */}
+
+        {locationStatus === "idle" && (
+
+          <div className="location-card">
+
+            <div className="location-loader">
+              📍
+            </div>
+
+            <h3>
+              Allow Location
+            </h3>
+
+            <p>
+              MaxiGo needs your current location
+              to deliver your order to the correct
+              location.
+            </p>
+
+            <p>
+              Please allow location access to
+              continue to checkout.
+            </p>
+
+            <button
+              type="button"
+              className="primary-button"
+              onClick={
+                getCustomerLiveLocation
+              }
+            >
+              📍 Allow Location
+            </button>
+
+          </div>
+
+        )}
+
+
+        {/* LOADING - GETTING LIVE LOCATION */}
 
         {locationStatus ===
           "loading" && (
@@ -1951,7 +1975,11 @@ function App() {
             </p>
 
           </div>
+
         )}
+
+
+        {/* ERROR - PERMISSION OR LOCATION FAILED */}
 
         {locationStatus ===
           "error" && (
@@ -1959,15 +1987,21 @@ function App() {
           <div className="location-card location-error-card">
 
             <div className="location-loader">
-              ⚠️
+              📍
             </div>
 
             <h3>
-              Location required
+              Allow Location Access
             </h3>
 
             <p>
-              {locationError}
+              MaxiGo needs your current location
+              to deliver your order correctly.
+            </p>
+
+            <p>
+              {locationError ||
+                "Please allow location permission to continue."}
             </p>
 
             <button
@@ -1977,11 +2011,15 @@ function App() {
                 getCustomerLiveLocation
               }
             >
-              Try Again
+              📍 Allow Location
             </button>
 
           </div>
+
         )}
+
+
+        {/* SUCCESS - LOCATION CAPTURED */}
 
         {locationStatus ===
           "success" &&
@@ -2019,6 +2057,7 @@ function App() {
             <div className="location-details">
 
               <div>
+
                 <span>
                   Latitude
                 </span>
@@ -2030,9 +2069,11 @@ function App() {
                       .toFixed(6)
                   }
                 </strong>
+
               </div>
 
               <div>
+
                 <span>
                   Longitude
                 </span>
@@ -2044,9 +2085,11 @@ function App() {
                       .toFixed(6)
                   }
                 </strong>
+
               </div>
 
               <div>
+
                 <span>
                   Accuracy
                 </span>
@@ -2059,6 +2102,7 @@ function App() {
                   }{" "}
                   m
                 </strong>
+
               </div>
 
             </div>
@@ -2098,6 +2142,7 @@ function App() {
             </small>
 
           </div>
+
         )}
 
       </div>
