@@ -1589,6 +1589,26 @@ function Profile({
             type="button"
             className="profile-option"
             onClick={() =>
+              setActivePage("help")
+            }
+          >
+            <span className="profile-option-icon">
+              🎧
+            </span>
+
+            <span className="profile-option-title">
+              {t('Help & Support')}
+            </span>
+
+            <span className="profile-arrow">
+              →
+            </span>
+          </button>
+
+          <button
+            type="button"
+            className="profile-option"
+            onClick={() =>
               setActiveModal(
                 "settings"
               )

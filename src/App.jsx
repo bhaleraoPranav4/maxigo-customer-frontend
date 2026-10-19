@@ -8,6 +8,7 @@ import { Geolocation } from "@capacitor/geolocation";
 
 import "./App.css";
 
+import HelpSupport from "./HelpSupport";
 import Search from "./Search";
 import Categories from "./Categories";
 import Orders from "./Orders";
@@ -1490,7 +1491,7 @@ function App() {
       ) {
         setLocationStatus("error");
         setLocationError(
-          "Location permission is required. Please tap Allow Location and allow MaxiGo to access your location."
+          "Location permission was denied. Please allow location access."
         );
         return;
       }
@@ -1525,21 +1526,20 @@ function App() {
       console.error("Location error:", error);
 
       let message =
-        "Unable to get your current location.";
+        "Unable to get your location.";
 
       const errorMessage =
         error?.message?.toLowerCase() || "";
 
       if (errorMessage.includes("permission")) {
         message =
-          "Location permission is required. Please tap Allow Location and allow MaxiGo to access your location.";
+          "Location permission was denied. Please allow location access.";
       } else if (errorMessage.includes("timeout")) {
-        message =
-          "Location request timed out. Please make sure your phone's Location/GPS is turned on and try again.";
+        message = "Location request timed out.";
       } else {
         message =
           error?.message ||
-          "Your location is currently unavailable. Please try again.";
+          "Your location is currently unavailable.";
       }
 
       setLocationError(message);
@@ -1578,10 +1578,7 @@ function App() {
         return;
       }
 
-      setCustomerLocation(null);
-      setLocationError("");
-      setLocationStatus("idle");
-      setActivePage("location");
+      getCustomerLiveLocation();
     };
 
   // =======================================================
@@ -1889,7 +1886,6 @@ function App() {
         <div className="page-header">
 
           <div>
-
             <h2>
               Delivery Location
             </h2>
@@ -1898,7 +1894,6 @@ function App() {
               Your current location
               is required before checkout.
             </p>
-
           </div>
 
           <button
@@ -1913,49 +1908,6 @@ function App() {
           </button>
 
         </div>
-
-
-        {/* IDLE - ASK CUSTOMER TO ALLOW LOCATION */}
-
-        {locationStatus === "idle" && (
-
-          <div className="location-card">
-
-            <div className="location-loader">
-              📍
-            </div>
-
-            <h3>
-              Allow Location
-            </h3>
-
-            <p>
-              MaxiGo needs your current location
-              to deliver your order to the correct
-              location.
-            </p>
-
-            <p>
-              Please allow location access to
-              continue to checkout.
-            </p>
-
-            <button
-              type="button"
-              className="primary-button"
-              onClick={
-                getCustomerLiveLocation
-              }
-            >
-              📍 Allow Location
-            </button>
-
-          </div>
-
-        )}
-
-
-        {/* LOADING - GETTING LIVE LOCATION */}
 
         {locationStatus ===
           "loading" && (
@@ -1975,11 +1927,7 @@ function App() {
             </p>
 
           </div>
-
         )}
-
-
-        {/* ERROR - PERMISSION OR LOCATION FAILED */}
 
         {locationStatus ===
           "error" && (
@@ -1987,21 +1935,15 @@ function App() {
           <div className="location-card location-error-card">
 
             <div className="location-loader">
-              📍
+              ⚠️
             </div>
 
             <h3>
-              Allow Location Access
+              Location required
             </h3>
 
             <p>
-              MaxiGo needs your current location
-              to deliver your order correctly.
-            </p>
-
-            <p>
-              {locationError ||
-                "Please allow location permission to continue."}
+              {locationError}
             </p>
 
             <button
@@ -2011,15 +1953,11 @@ function App() {
                 getCustomerLiveLocation
               }
             >
-              📍 Allow Location
+              Try Again
             </button>
 
           </div>
-
         )}
-
-
-        {/* SUCCESS - LOCATION CAPTURED */}
 
         {locationStatus ===
           "success" &&
@@ -2057,7 +1995,6 @@ function App() {
             <div className="location-details">
 
               <div>
-
                 <span>
                   Latitude
                 </span>
@@ -2069,11 +2006,9 @@ function App() {
                       .toFixed(6)
                   }
                 </strong>
-
               </div>
 
               <div>
-
                 <span>
                   Longitude
                 </span>
@@ -2085,11 +2020,9 @@ function App() {
                       .toFixed(6)
                   }
                 </strong>
-
               </div>
 
               <div>
-
                 <span>
                   Accuracy
                 </span>
@@ -2102,7 +2035,6 @@ function App() {
                   }{" "}
                   m
                 </strong>
-
               </div>
 
             </div>
@@ -2142,7 +2074,6 @@ function App() {
             </small>
 
           </div>
-
         )}
 
       </div>
@@ -3260,6 +3191,10 @@ function App() {
 
       )}
 
+      {activePage === "help" && (
+        <HelpSupport />
+      )}
+
       {activePage ===
         "profile" && (
 
@@ -3305,11 +3240,27 @@ function App() {
               ? "bottom-active"
               : ""
           }
-          onClick={() =>
-            setActivePage(
-              "home"
-            )
-          }
+          onClick={() => {
+            setSelectedCategory("all");
+            setSelectedStoreId(null);
+            setSearch("");
+            setActivePage("home");
+
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+
+            document.documentElement.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+
+            document.body.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+          }}
         >
 
           <span>
