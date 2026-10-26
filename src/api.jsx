@@ -1,3 +1,4 @@
+
 const API_BASE = "https://api.maxigo.in/api";
 
 const TOKEN_KEY = "maxigo_token";
@@ -73,10 +74,15 @@ export async function apiRequest(path, options = {}) {
     ...(fetchOptions.headers || {}),
   };
 
-  if (fetchOptions.body && !isFormData && !headers["Content-Type"]) {
+  if (
+    fetchOptions.body &&
+    !isFormData &&
+    !headers["Content-Type"]
+  ) {
     headers["Content-Type"] = "application/json";
   }
 
+  // Read the latest token for every request.
   const token = getToken();
 
   if (token && !skipAuth) {
@@ -90,16 +96,43 @@ export async function apiRequest(path, options = {}) {
       ...fetchOptions,
       headers,
     });
-  } catch (error) {
-    console.error("MaxiGo API connection error:", error);
-    throw new Error(
-      "Unable to connect to MaxiGo backend. Please make sure Spring Boot is running on port 8080."
+  } catch (cause) {
+    console.error("MaxiGo API connection error:", {
+      path,
+      message: cause?.message,
+    });
+
+    const error = new Error(
+      "Unable to connect to MaxiGo. Please check your internet connection and try again."
     );
+
+    error.cause = cause;
+    error.status = 0;
+    throw error;
   }
 
-  const data = await parseResponse(response);
+  let data;
+
+  try {
+    data = await parseResponse(response);
+  } catch (cause) {
+    console.error("MaxiGo API response parsing error:", {
+      path,
+      status: response.status,
+      message: cause?.message,
+    });
+
+    const error = new Error(
+      "Unable to read the server response. Please try again."
+    );
+
+    error.cause = cause;
+    error.status = response.status;
+    throw error;
+  }
 
   if (!response.ok) {
+    // Preserve the existing authentication behavior.
     if (response.status === 401 && !skipAuth) {
       clearAuth();
     }
@@ -117,6 +150,13 @@ export async function apiRequest(path, options = {}) {
     const error = new Error(message);
     error.status = response.status;
     error.data = data;
+
+    console.error("MaxiGo API request failed:", {
+      path,
+      status: response.status,
+      message,
+    });
+
     throw error;
   }
 
@@ -191,15 +231,21 @@ export const getProduct = (id) =>
 export const getCategories = () =>
   apiRequest("/categories", { skipAuth: true });
 
-
 // =========================================================
 // CUSTOMER STORE
 // =========================================================
 
-export const getCustomerStore = (storeId) =>
-  apiRequest(
-    `/customer/stores/${Number(storeId)}`
-  );
+export const getCustomerStore = (storeId) => {
+  const id = Number(storeId);
+
+  if (!Number.isFinite(id) || id <= 0) {
+    const error = new Error("Invalid store ID.");
+    error.status = 400;
+    throw error;
+  }
+
+  return apiRequest(`/customer/stores/${id}`);
+};
 
 // =========================================================
 // CUSTOMER PROFILE
@@ -354,8 +400,6 @@ export const getReferralHistory = () =>
   apiRequest("/customer/referral/history");
 
 // Applied referral status endpoint.
-// If backend is not yet exposing this endpoint, the Referral page
-// can still show the customer's own referral-program details.
 export const getAppliedReferral = () =>
   apiRequest("/customer/referral/applied");
 

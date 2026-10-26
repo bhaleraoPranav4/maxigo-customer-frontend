@@ -1,0 +1,421 @@
+.maxigo-help {
+  --help-primary: #e85d04;
+  --help-primary-dark: #c94b00;
+  --help-text: #20242b;
+  --help-muted: #687386;
+  --help-border: #e7eaf0;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+  color: var(--help-text);
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.maxigo-help *,
+.maxigo-help *::before,
+.maxigo-help *::after {
+  box-sizing: border-box;
+}
+
+.maxigo-help .help-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 30px;
+  margin-bottom: 24px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #fff2e8, #fffaf5);
+  border: 1px solid #ffe1cc;
+}
+
+.maxigo-help .help-eyebrow {
+  color: var(--help-primary-dark);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.maxigo-help .help-header h1 {
+  margin: 9px 0;
+  font-size: clamp(26px, 4vw, 36px);
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+.maxigo-help .help-header p {
+  margin: 0;
+  color: var(--help-muted);
+  line-height: 1.6;
+}
+
+.maxigo-help .help-header-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 76px;
+  height: 76px;
+  border-radius: 22px;
+  background: white;
+  font-size: 38px;
+  box-shadow: 0 5px 18px #e85d0415;
+}
+
+.maxigo-help .help-contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 38px;
+}
+
+.maxigo-help .help-contact-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid var(--help-border);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 5px 20px #18223008;
+}
+
+.maxigo-help .help-contact-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 14px;
+  border-radius: 13px;
+  background: #fff2e8;
+  font-size: 23px;
+}
+
+.maxigo-help .help-contact-card h2 {
+  margin: 0 0 8px;
+  font-size: 17px;
+  font-weight: 750;
+}
+
+.maxigo-help .help-contact-card p {
+  min-height: 24px;
+  margin: 0 0 18px;
+  color: var(--help-muted);
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.maxigo-help .help-contact-card .help-email {
+  font-size: 13px;
+}
+
+.maxigo-help .help-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 11px 15px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.maxigo-help .help-btn:hover {
+  transform: translateY(-1px);
+}
+
+.maxigo-help .help-btn-primary {
+  color: #fff;
+  background: var(--help-primary);
+}
+
+.maxigo-help .help-btn-primary:hover {
+  color: #fff;
+  background: var(--help-primary-dark);
+}
+
+.maxigo-help .help-btn-whatsapp {
+  color: #fff;
+  background: #168b51;
+}
+
+.maxigo-help .help-btn-whatsapp:hover {
+  background: #117441;
+}
+
+.maxigo-help .help-btn-secondary {
+  color: var(--help-primary-dark);
+  background: #fff;
+  border-color: #f2c5a8;
+}
+
+.maxigo-help .help-btn-secondary:hover {
+  background: #fff5ee;
+}
+
+.maxigo-help .help-section {
+  margin: 0 0 38px;
+}
+
+.maxigo-help .help-section-heading {
+  margin-bottom: 18px;
+}
+
+.maxigo-help .help-section-heading h2 {
+  margin: 0 0 7px;
+  font-size: 23px;
+  font-weight: 800;
+}
+
+.maxigo-help .help-section-heading p {
+  margin: 0;
+  color: var(--help-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.maxigo-help .help-topic-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+}
+
+.maxigo-help .help-topic-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-width: 0;
+  padding: 18px;
+  color: inherit;
+  text-align: left;
+  background: #fff;
+  border: 1px solid var(--help-border);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.maxigo-help .help-topic-card:hover,
+.maxigo-help .help-topic-card[aria-expanded="true"] {
+  border-color: #f1a16f;
+  box-shadow: 0 5px 18px #e85d040d;
+}
+
+.maxigo-help .help-topic-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #fff2e8;
+  font-size: 23px;
+}
+
+.maxigo-help .help-topic-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.maxigo-help .help-topic-content strong {
+  font-size: 15px;
+}
+
+.maxigo-help .help-topic-content small {
+  color: var(--help-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.maxigo-help .help-topic-arrow {
+  color: var(--help-primary);
+  font-size: 25px;
+}
+
+.maxigo-help .help-complaint-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px;
+  border: 1px solid var(--help-border);
+  border-radius: 16px;
+  background: #fff;
+}
+
+.maxigo-help .help-complaint-form label {
+  margin-top: 5px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.maxigo-help .help-complaint-form input,
+.maxigo-help .help-complaint-form select,
+.maxigo-help .help-complaint-form textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 12px 13px;
+  color: var(--help-text);
+  background: #fff;
+  border: 1px solid #dce1e8;
+  border-radius: 9px;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+}
+
+.maxigo-help .help-complaint-form textarea {
+  resize: vertical;
+}
+
+.maxigo-help .help-complaint-form input:focus,
+.maxigo-help .help-complaint-form select:focus,
+.maxigo-help .help-complaint-form textarea:focus {
+  border-color: var(--help-primary);
+  box-shadow: 0 0 0 3px #e85d0415;
+}
+
+.maxigo-help .help-message-count {
+  color: var(--help-muted);
+  font-size: 12px;
+  text-align: right;
+}
+
+.maxigo-help .help-faq-list {
+  overflow: hidden;
+  border: 1px solid var(--help-border);
+  border-radius: 14px;
+  background: #fff;
+}
+
+.maxigo-help .help-faq-item + .help-faq-item {
+  border-top: 1px solid var(--help-border);
+}
+
+.maxigo-help .help-faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  padding: 17px 19px;
+  color: var(--help-text);
+  background: #fff;
+  border: 0;
+  text-align: left;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.maxigo-help .help-faq-question:hover {
+  background: #fffaf6;
+}
+
+.maxigo-help .help-faq-question span:last-child {
+  color: var(--help-primary);
+  font-size: 23px;
+}
+
+.maxigo-help .help-faq-answer {
+  margin: 0;
+  padding: 0 19px 18px;
+  color: var(--help-muted);
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.maxigo-help .help-footer {
+  padding: 23px;
+  text-align: center;
+  background: #fff7f1;
+  border: 1px solid #ffe1cc;
+  border-radius: 15px;
+}
+
+.maxigo-help .help-footer strong {
+  font-size: 17px;
+}
+
+.maxigo-help .help-footer p {
+  margin: 8px 0;
+  color: var(--help-muted);
+  font-size: 14px;
+}
+
+.maxigo-help .help-footer a {
+  color: var(--help-primary-dark);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 760px) {
+  .maxigo-help {
+    padding: 16px;
+  }
+
+  .maxigo-help .help-header {
+    padding: 22px 18px;
+  }
+
+  .maxigo-help .help-header-icon {
+    width: 55px;
+    height: 55px;
+    border-radius: 16px;
+    font-size: 28px;
+  }
+
+  .maxigo-help .help-contact-grid {
+    grid-template-columns: 1fr;
+    gap: 13px;
+  }
+
+  .maxigo-help .help-contact-card {
+    padding: 18px;
+  }
+
+  .maxigo-help .help-contact-card p {
+    min-height: 0;
+  }
+
+  .maxigo-help .help-topic-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .maxigo-help .help-complaint-form {
+    padding: 17px;
+  }
+}
+
+@media (max-width: 380px) {
+  .maxigo-help {
+    padding: 12px;
+  }
+
+  .maxigo-help .help-header {
+    padding: 18px 14px;
+  }
+
+  .maxigo-help .help-header-icon {
+    display: none;
+  }
+
+  .maxigo-help .help-section-heading h2 {
+    font-size: 20px;
+  }
+}
